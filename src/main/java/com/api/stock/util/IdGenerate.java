@@ -1,7 +1,9 @@
 package com.api.stock.util;
 
 import com.api.stock.model.Cliente;
+import com.api.stock.model.Endereco;
 import com.api.stock.repository.ClienteRepository;
+import com.api.stock.repository.EnderecoRespository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +16,25 @@ public class IdGenerate {
     @Autowired
     private ClienteRepository clienteRepository;
 
+    @Autowired
+    private EnderecoRespository enderecoRespository;
+
     @Transactional
-    public String generateNextId(String prefix) {
-        Optional<Cliente> maxIdCliente = clienteRepository.findTopByOrderByIdDesc();
+    public String generateNextId(String prefix, String model) {
+        Optional<?> maxIdModel = verify(model);
         String newId;
 
-        if(maxIdCliente.isPresent()) {
-            String maxId = maxIdCliente.get().getId();
+        if(maxIdModel.isPresent()) {
+            String maxId = maxIdModel.map(entity -> {
+                if (entity instanceof Cliente) {
+                    return ((Cliente) entity).getId();
+                } else if (entity instanceof Endereco) {
+                    return ((Endereco) entity).getId();
+                } else {
+                    throw new IllegalArgumentException("Tipo desconhecido: " + entity.getClass().getName());
+                }
+            }).orElseThrow();
+
             int numericPart = Integer.parseInt(maxId.substring(1));
             newId = prefix + String.format("%04d", numericPart + 1);
         } else {
@@ -28,5 +42,17 @@ public class IdGenerate {
         }
 
         return newId;
+    }
+
+    public Optional<?> verify(String model) {
+        if(model.equalsIgnoreCase("cliente")) {
+           return clienteRepository.findTopByOrderByIdDesc();
+        }
+
+        if(model.equalsIgnoreCase("endereco")) {
+            return enderecoRespository.findTopByOrderByIdDesc();
+        }
+
+        return Optional.empty();
     }
 }

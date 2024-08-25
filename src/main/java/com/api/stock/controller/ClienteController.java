@@ -28,7 +28,7 @@ public class ClienteController {
 
     @PostMapping("/add")
     public ResponseEntity<Object> createCliente(@RequestBody Cliente cliente) {
-        cliente.setId(idGenerate.generateNextId("C"));
+        cliente.setId(idGenerate.generateNextId("C", "cliente"));
 
         Optional<Cliente> verifyClienteByCnpj = clienteRepository.findByCnpj(cliente.getCnpj());
         Optional<Cliente> verifyClienteByEmail = clienteRepository.findByEmail(cliente.getEmail());
@@ -71,7 +71,7 @@ public class ClienteController {
         return ResponseEntity.status(HttpStatus.OK).body(clienteList);
     }
 
-    @GetMapping("/getOne/{id}")
+    @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneCliente(@PathVariable String id) {
         Optional<Cliente> cliente = clienteRepository.findById(id.toUpperCase());
         if(!cliente.isPresent()) {
