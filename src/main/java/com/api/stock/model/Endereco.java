@@ -40,7 +40,7 @@ public class Endereco {
 
     @Column(nullable = true)
     private String cliente_id;
-
+//
     @Column(nullable = true)
     private String fornecedor_id;
 
