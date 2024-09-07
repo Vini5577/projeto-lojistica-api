@@ -1,0 +1,12 @@
+package com.api.stock.model;
+
+public enum StatusPedido {
+    PEDIDO_RECEBIDO,
+    ENVIADO_TRANSPORTADORA,
+    RECEBEDIDO_TRANSPORTADORA,
+    MERCADORIA_TRANSITO,
+    PEDIDO_ENTREGUE,
+    PROBLEMA_ENTREGA,
+    DEVOLUCAO,
+    CANCELAMENTO
+}

@@ -29,7 +29,4 @@ public class Cliente {
 
     @Column(nullable = false)
     String cnpj;
-
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Endereco> enderecos = new ArrayList<>();
 }

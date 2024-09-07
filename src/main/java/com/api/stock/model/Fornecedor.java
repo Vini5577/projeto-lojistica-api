@@ -32,7 +32,4 @@ public class Fornecedor {
 
     @Column(nullable = false)
     private TipoServico tipoServico;
-
-    @OneToMany(mappedBy = "fornecedor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Endereco> enderecos = new ArrayList<>();
 }
