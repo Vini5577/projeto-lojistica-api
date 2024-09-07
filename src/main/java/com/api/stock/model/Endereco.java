@@ -1,9 +1,7 @@
 package com.api.stock.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,10 +36,14 @@ public class Endereco {
 
     private String complemento;
 
-    @Column(nullable = true)
-    private String cliente_id;
-//
-    @Column(nullable = true)
-    private String fornecedor_id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id", nullable = true)
+    @JsonIgnore
+    private Cliente cliente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "fornecedor_id", nullable = true)
+    @JsonIgnore
+    private Fornecedor fornecedor;
 
 }

@@ -1,8 +1,15 @@
 package com.api.stock.controller;
 
+import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
+import com.api.stock.model.Fornecedor;
+import com.api.stock.repository.ClienteRepository;
 import com.api.stock.repository.EnderecoRespository;
+import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.util.IdGenerate;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@Controller
+@RestController
 @RequestMapping("/endereco")
 public class EnderecoController {
 
@@ -23,9 +30,41 @@ public class EnderecoController {
     @Autowired
     EnderecoRespository enderecoRespository;
 
-    @PostMapping("/add")
-    public ResponseEntity<Object> addEndereco(@RequestBody Endereco endereco) {
+    @Autowired
+    ClienteRepository clienteRepository;
+
+    @Autowired
+    FornecedorRepository fornecedorRepository;
+
+    @PostMapping("/add/fornecedor/{fornecedor_id}")
+    public ResponseEntity<Object> addEnderecoForFornecedor(@RequestBody Endereco endereco, @PathVariable String fornecedor_id) {
         endereco.setId(idGenerate.generateNextId("E", "endereco"));
+
+        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(fornecedor_id);
+
+        if(!fornecedor.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não existe");
+        }
+
+        endereco.setCliente(null);
+        endereco.setFornecedor(fornecedor.get());
+
+        var enderecoSalvo = enderecoRespository.save(endereco);
+
+        return ResponseEntity.status(HttpStatus.OK).body(enderecoSalvo);
+    }
+
+    @PostMapping("/add/cliente/{cliente_id}")
+    public ResponseEntity<Object> addEnderecoForCliente(@RequestBody Endereco endereco, @PathVariable String cliente_id) {
+        endereco.setId(idGenerate.generateNextId("E", "endereco"));
+        Optional<Cliente> cliente = clienteRepository.findById(cliente_id);
+
+        if(!cliente.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não existe");
+        }
+
+        endereco.setCliente(cliente.get());
+        endereco.setFornecedor(null);
 
         var enderecoSalvo = enderecoRespository.save(endereco);
 
@@ -48,6 +87,32 @@ public class EnderecoController {
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(endereco);
+    }
+
+    @GetMapping("/get/cliente/{cliente_id}")
+    public ResponseEntity<Object> getEnderecoForCliente(@PathVariable String cliente_id) {
+        Optional<Cliente> cliente = clienteRepository.findById(cliente_id);
+
+        if(!cliente.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não existe!");
+        }
+
+        Optional<Endereco> endereco = enderecoRespository.findByCliente(cliente.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(endereco.get());
+    }
+
+    @GetMapping("/get/fornecedor/{fornecedor_id}")
+    public ResponseEntity<Object> getEnderecoForFornecedor(@PathVariable String fornecedor_id) {
+        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(fornecedor_id);
+
+        if(!fornecedor.isPresent()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não existe!");
+        }
+
+        Optional<Endereco> endereco = enderecoRespository.findByFornecedor(fornecedor.get());
+
+        return ResponseEntity.status(HttpStatus.OK).body(endereco.get());
     }
 
     @PutMapping("/update/{id}")
@@ -86,6 +151,14 @@ public class EnderecoController {
 
         if(endereco.getBairro() == null) {
             endereco.setBairro(enderecoOptional.get().getBairro());
+        }
+
+        if(endereco.getCliente() == null) {
+            endereco.setCliente(enderecoOptional.get().getCliente());
+        }
+
+        if(endereco.getFornecedor() == null) {
+            endereco.setFornecedor(enderecoOptional.get().getFornecedor());
         }
 
         enderecoRespository.save(endereco);
