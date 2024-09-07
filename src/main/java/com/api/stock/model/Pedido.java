@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Entity
 @Data
 @NoArgsConstructor
@@ -29,6 +31,12 @@ public class Pedido {
 
     @Column(nullable = true)
     private String notaFiscal;
+
+    @Column(nullable = false)
+    private Double valor;
+
+    @Column(nullable = false)
+    private Integer qtd;
 
     @Column(nullable = true)
     private StatusPedido statusPedido;
