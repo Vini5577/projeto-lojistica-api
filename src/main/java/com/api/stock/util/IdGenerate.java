@@ -3,9 +3,11 @@ package com.api.stock.util;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
 import com.api.stock.model.Fornecedor;
+import com.api.stock.model.Produto;
 import com.api.stock.repository.ClienteRepository;
 import com.api.stock.repository.EnderecoRespository;
 import com.api.stock.repository.FornecedorRepository;
+import com.api.stock.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,9 @@ public class IdGenerate {
     @Autowired
     private FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    private ProdutoRepository produtoRepository;
+
     @Transactional
     public String generateNextId(String prefix, String model) {
         Optional<?> maxIdModel = verify(model);
@@ -37,7 +42,10 @@ public class IdGenerate {
                     return ((Endereco) entity).getId();
                 } else if (entity instanceof Fornecedor) {
                     return ((Fornecedor) entity).getId();
-                } else {
+                } else if (entity instanceof Produto) {
+                    return ((Produto) entity).getId();
+                }
+                else {
                     throw new IllegalArgumentException("Tipo desconhecido: " + entity.getClass().getName());
                 }
             }).orElseThrow();
@@ -62,6 +70,10 @@ public class IdGenerate {
 
         if(model.equalsIgnoreCase("fornecedor")) {
             return fornecedorRepository.findTopByOrderByIdDesc();
+        }
+
+        if(model.equalsIgnoreCase("produto")) {
+            return produtoRepository.findTopByOrderByIdDesc();
         }
 
         return Optional.empty();
