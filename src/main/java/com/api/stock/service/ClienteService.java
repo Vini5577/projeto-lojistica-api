@@ -29,7 +29,6 @@ public class ClienteService {
 
         String generatedId = idGenerate.generateNextId("C", "cliente");
 
-        // Validar CNPJ e Telefone
         String cnpjFormat = verifyUtil.validateCnpj(clienteDTO.getCnpj());
         String telefoneFormat = verifyUtil.validateTelefone(clienteDTO.getTelefone());
 
@@ -61,7 +60,7 @@ public class ClienteService {
 
     public Cliente updateCliente(String id, ClienteDTO clienteDTO) {
 
-        Cliente clienteExistente = clienteRepository.findById(id.toUpperCase())
+        Cliente clienteExistente = clienteRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         String nome = clienteDTO.getNome() != null ? clienteDTO.getNome() : clienteExistente.getNome();
@@ -92,7 +91,7 @@ public class ClienteService {
     public void deleteCliente(String id) {
         Optional<Cliente> clienteOptional = clienteRepository.findById(id.toUpperCase());
         if(!clienteOptional.isPresent()) {
-            new RuntimeException("Cliente não encontrado");
+           throw  new RuntimeException("Cliente não encontrado");
         }
 
         clienteRepository.deleteById(id);
