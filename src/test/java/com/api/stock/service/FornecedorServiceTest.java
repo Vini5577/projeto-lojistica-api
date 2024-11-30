@@ -65,7 +65,7 @@ public class FornecedorServiceTest {
         when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(cnpjFormatado);
         when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(telefoneFormatado);
 
-        when(fornecedorRepository.save(any(Fornecedor.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Retorna o fornecedor salvo
+        when(fornecedorRepository.save(any(Fornecedor.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Fornecedor fornecedor = fornecedorService.createFornecedor(fornecedorDTO);
 
@@ -90,7 +90,7 @@ public class FornecedorServiceTest {
                 TipoServico.TRANSPORTE
         );
 
-        when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(null); // CNPJ inválido
+        when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(null);
         when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn("61999999999");
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -111,7 +111,7 @@ public class FornecedorServiceTest {
         );
 
         when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn("12345678000199");
-        when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(null); // Telefone inválido
+        when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             fornecedorService.createFornecedor(fornecedorDTO);
@@ -246,7 +246,7 @@ public class FornecedorServiceTest {
         when(fornecedorRepository.findById(fornecedorId.toUpperCase())).thenReturn(Optional.of(fornecedorExistente));
         when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(cnpjFormatado);
         when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(telefoneFormatado);
-        when(fornecedorRepository.save(any(Fornecedor.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Retorna o fornecedor atualizado
+        when(fornecedorRepository.save(any(Fornecedor.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Fornecedor fornecedorAtualizado = fornecedorService.updateFornecedor(fornecedorId, fornecedorDTO);
 
@@ -269,7 +269,7 @@ public class FornecedorServiceTest {
         Fornecedor fornecedorExistente = new Fornecedor(fornecedorId, "Fornecedor Antigo", "98765432000188", "antigoemail@teste.com", "61988888888", TipoServico.TRANSPORTE);
 
         when(fornecedorRepository.findById(fornecedorId.toUpperCase())).thenReturn(Optional.of(fornecedorExistente));
-        when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(null); // CNPJ inválido
+        when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn(null);
         when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn("61999999999");
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -288,7 +288,7 @@ public class FornecedorServiceTest {
 
         when(fornecedorRepository.findById(fornecedorId.toUpperCase())).thenReturn(Optional.of(fornecedorExistente));
         when(verifyUtil.validateCnpj(fornecedorDTO.getCnpj())).thenReturn("12345678000199");
-        when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(null); // Telefone inválido
+        when(verifyUtil.validateTelefone(fornecedorDTO.getTelefone())).thenReturn(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             fornecedorService.updateFornecedor(fornecedorId, fornecedorDTO);

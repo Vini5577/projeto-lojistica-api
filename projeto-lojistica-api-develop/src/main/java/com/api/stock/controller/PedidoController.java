@@ -68,7 +68,7 @@ public class PedidoController {
         Entrega entrega = new Entrega();
         entrega.setPedido(pedidoRealizado);
         entrega.setStatusEntrega("EM_ROTA");
-        entrega.setDataEntrega(new Date()); // Defina a data conforme necessário
+        entrega.setDataEntrega(new Date());
         entregaRepository.save(entrega);
 
         return ResponseEntity.status(HttpStatus.OK).body(pedidoRealizado);
@@ -210,7 +210,7 @@ public class PedidoController {
         Entrega entrega = new Entrega();
         entrega.setPedido(pedido.get());
         entrega.setStatusEntrega("EM_ROTA");
-        entrega.setDataEntrega(new Date()); // Defina a data conforme necessário
+        entrega.setDataEntrega(new Date());
         entregaRepository.save(entrega);
 
         return ResponseEntity.status(HttpStatus.OK).body("Entrega criada com sucesso!");

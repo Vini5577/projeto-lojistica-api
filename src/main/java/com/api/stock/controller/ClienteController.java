@@ -33,28 +33,48 @@ public class ClienteController {
 
     @PostMapping("/add")
     public ResponseEntity<Object> createCliente(@RequestBody ClienteDTO clienteDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.createCliente(clienteDTO));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(clienteService.createCliente(clienteDTO));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getAllCliente() {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.getCliente());
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(clienteService.getAllCliente());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneCliente(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(clienteService.getOneCliente(id));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(clienteService.getOneCliente(id));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCliente(@PathVariable String id, @RequestBody ClienteDTO cliente) {
-        clienteService.updateCliente(id, cliente);
-        return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
+        try {
+            clienteService.updateCliente(id, cliente);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCliente(@PathVariable String id) {
-        clienteService.deleteCliente(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+        try {
+            clienteService.deleteCliente(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

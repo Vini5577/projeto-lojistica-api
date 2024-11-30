@@ -24,7 +24,6 @@ public class ClienteRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        // Configura um cliente antes de cada teste
         cliente = new Cliente();
         cliente.setId("C1");
         cliente.setNome("Cliente Teste");
@@ -32,7 +31,7 @@ public class ClienteRepositoryTest {
         cliente.setEmail("email@teste.com");
         cliente.setTelefone("11987654321");
 
-        clienteRepository.save(cliente); // Salva no banco em memória
+        clienteRepository.save(cliente);
     }
 
     @Test
@@ -73,13 +72,13 @@ public class ClienteRepositoryTest {
         Optional<Cliente> topCliente = clienteRepository.findTopByOrderByIdDesc();
 
         assertTrue(topCliente.isPresent());
-        assertEquals("C2", topCliente.get().getId()); // Deve retornar o cliente com ID maior
+        assertEquals("C2", topCliente.get().getId());
     }
 
     @Test
     public void testFindByCnpjNotFound() {
         Optional<Cliente> foundCliente = clienteRepository.findByCnpj("00000000000000");
 
-        assertFalse(foundCliente.isPresent());  // Deve retornar vazio se não encontrar o CNPJ
+        assertFalse(foundCliente.isPresent());
     }
 }

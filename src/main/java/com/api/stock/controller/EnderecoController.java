@@ -1,19 +1,17 @@
 package com.api.stock.controller;
 
+import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.repository.ClienteRepository;
-import com.api.stock.repository.EnderecoRespository;
+import com.api.stock.repository.EnderecoRepository;
 import com.api.stock.repository.FornecedorRepository;
+import com.api.stock.service.EnderecoService;
 import com.api.stock.util.IdGenerate;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,7 +26,7 @@ public class EnderecoController {
     IdGenerate idGenerate;
 
     @Autowired
-    EnderecoRespository enderecoRespository;
+    EnderecoRepository enderecoRepository;
 
     @Autowired
     ClienteRepository clienteRepository;
@@ -36,145 +34,83 @@ public class EnderecoController {
     @Autowired
     FornecedorRepository fornecedorRepository;
 
+    @Autowired
+    EnderecoService enderecoService;
+
     @PostMapping("/add/fornecedor/{fornecedor_id}")
-    public ResponseEntity<Object> addEnderecoForFornecedor(@RequestBody Endereco endereco, @PathVariable String fornecedor_id) {
-        endereco.setId(idGenerate.generateNextId("E", "endereco"));
-
-        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(fornecedor_id);
-
-        if(!fornecedor.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não existe");
+    public ResponseEntity<Object> createEnderecoForFornecedor(@RequestBody EnderecoDTO enderecoDTO, @PathVariable String fornecedor_id) {
+        try {
+            Endereco enderecoSalvo = enderecoService.createEnderecoForFornecedor(enderecoDTO, fornecedor_id);
+            return ResponseEntity.status(HttpStatus.CREATED).body(enderecoSalvo);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        endereco.setCliente(null);
-        endereco.setFornecedor(fornecedor.get());
-
-        var enderecoSalvo = enderecoRespository.save(endereco);
-
-        return ResponseEntity.status(HttpStatus.OK).body(enderecoSalvo);
     }
 
     @PostMapping("/add/cliente/{cliente_id}")
-    public ResponseEntity<Object> addEnderecoForCliente(@RequestBody Endereco endereco, @PathVariable String cliente_id) {
-        endereco.setId(idGenerate.generateNextId("E", "endereco"));
-        Optional<Cliente> cliente = clienteRepository.findById(cliente_id);
-
-        if(!cliente.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não existe");
+    public ResponseEntity<Object> createEnderecoForCliente(@RequestBody EnderecoDTO enderecoDTO, @PathVariable String cliente_id) {
+        try {
+            Endereco enderecoSalvo = enderecoService.createEnderecoForCliente(enderecoDTO, cliente_id);
+            return ResponseEntity.status(HttpStatus.CREATED).body(enderecoSalvo);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        endereco.setCliente(cliente.get());
-        endereco.setFornecedor(null);
-
-        var enderecoSalvo = enderecoRespository.save(endereco);
-
-        return ResponseEntity.status(HttpStatus.OK).body(enderecoSalvo);
     }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getEndereco() {
-        List<Endereco> endereco = enderecoRespository.findAll();
-
-        return ResponseEntity.status(HttpStatus.OK).body(endereco);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(enderecoService.getAllEndereco());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneEndereco(@PathVariable String id) {
-        Optional<Endereco> endereco = enderecoRespository.findById(id);
-
-        if(!endereco.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado!");
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(enderecoService.getOneEndereco(id));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(endereco);
     }
 
-    @GetMapping("/get/cliente/{cliente_id}")
-    public ResponseEntity<Object> getEnderecoForCliente(@PathVariable String cliente_id) {
-        Optional<Cliente> cliente = clienteRepository.findById(cliente_id);
-
-        if(!cliente.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não existe!");
+    @GetMapping("/cliente/{cliente_id}")
+    public ResponseEntity<Object> getEnderecoByCliente(@PathVariable String cliente_id) {
+        try {
+            Endereco endereco = enderecoService.getEnderecoByCliente(cliente_id);
+            return ResponseEntity.status(HttpStatus.OK).body(endereco);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        Optional<Endereco> endereco = enderecoRespository.findByCliente(cliente.get());
-
-        return ResponseEntity.status(HttpStatus.OK).body(endereco.get());
     }
 
-    @GetMapping("/get/fornecedor/{fornecedor_id}")
-    public ResponseEntity<Object> getEnderecoForFornecedor(@PathVariable String fornecedor_id) {
-        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(fornecedor_id);
-
-        if(!fornecedor.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Fornecedor não existe!");
+    @GetMapping("/fornecedor/{fornecedor_id}")
+    public ResponseEntity<Object> getEnderecoByFornecedor(@PathVariable String fornecedor_id) {
+        try {
+            Endereco endereco = enderecoService.getEnderecoByFornecedor(fornecedor_id);
+            return ResponseEntity.status(HttpStatus.OK).body(endereco);
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        Optional<Endereco> endereco = enderecoRespository.findByFornecedor(fornecedor.get());
-
-        return ResponseEntity.status(HttpStatus.OK).body(endereco.get());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<String>  updateEndereco(@PathVariable String id, @RequestBody Endereco endereco) {
-        Optional<Endereco> enderecoOptional = enderecoRespository.findById(id);
-
-        if(!enderecoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado!");
+    public ResponseEntity<String> updateEndereco(@PathVariable String id, @RequestBody EnderecoDTO enderecoDTO) {
+        try {
+            enderecoService.updateEndereco(id, enderecoDTO);
+            return ResponseEntity.status(HttpStatus.OK).body("Endereço atualizado com sucesso!");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        endereco.setId(enderecoOptional.get().getId());
-
-        if(endereco.getCep() == null) {
-            endereco.setCep(enderecoOptional.get().getCep());
-        }
-
-        if(endereco.getCidade() == null) {
-            endereco.setCidade(enderecoOptional.get().getCidade());
-        }
-
-        if(endereco.getComplemento() == null) {
-            endereco.setComplemento(enderecoOptional.get().getComplemento());
-        }
-
-        if(endereco.getNumero() == null) {
-            endereco.setNumero(enderecoOptional.get().getNumero());
-        }
-
-        if(endereco.getEstado() == null) {
-            endereco.setEstado(enderecoOptional.get().getEstado());
-        }
-
-        if(endereco.getRua() == null) {
-            endereco.setRua(enderecoOptional.get().getRua());
-        }
-
-        if(endereco.getBairro() == null) {
-            endereco.setBairro(enderecoOptional.get().getBairro());
-        }
-
-        if(endereco.getCliente() == null) {
-            endereco.setCliente(enderecoOptional.get().getCliente());
-        }
-
-        if(endereco.getFornecedor() == null) {
-            endereco.setFornecedor(enderecoOptional.get().getFornecedor());
-        }
-
-        enderecoRespository.save(endereco);
-
-        return ResponseEntity.status(HttpStatus.OK).body("Endereço atualizado com sucesso!");
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteEndereco(@PathVariable String id) {
-        Optional<Endereco> endereco = enderecoRespository.findById(id);
-
-        if(!endereco.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Endereço não encontrado!!");
+        try {
+            enderecoService.deleteEndereco(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Endereço deletado com sucesso!");
+        } catch (RuntimeException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        enderecoRespository.deleteById(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Endereço deletado com sucesso!");
     }
 }

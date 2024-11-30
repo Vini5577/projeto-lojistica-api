@@ -33,28 +33,48 @@ public class FornecedorController {
 
     @PostMapping("/add")
     public ResponseEntity<Object> createFornecedor(@RequestBody FornecedorDTO fornecedor) {
-        return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.createFornecedor(fornecedor));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.createFornecedor(fornecedor));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getAllFornecedor() {
-        return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.getAllFornecedor());
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.getAllFornecedor());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneFornecedor(@PathVariable String id) {
-        return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.getOneFornecedor(id));
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(fornecedorService.getOneFornecedor(id));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateFornecedor(@PathVariable String id, @RequestBody FornecedorDTO fornecedor) {
-        fornecedorService.updateFornecedor(id, fornecedor);
-        return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
+        try {
+            fornecedorService.updateFornecedor(id, fornecedor);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+        }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteFornecedor(@PathVariable String id) {
-        fornecedorService.deleteFornecedor(id);
-        return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+        try {
+            fornecedorService.deleteFornecedor(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
     }
 }

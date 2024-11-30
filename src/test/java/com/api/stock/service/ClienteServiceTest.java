@@ -59,7 +59,7 @@ public class ClienteServiceTest {
         when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(cnpjFormatado);
         when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(telefoneFormatado);
 
-        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Retorna o cliente salvo
+        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Cliente cliente = clienteService.createCliente(clienteDTO);
 
@@ -77,7 +77,7 @@ public class ClienteServiceTest {
     public void testCreateCliente_CnpjInvalido() {
         ClienteDTO clienteDTO = new ClienteDTO("Cliente Teste", "12345678", "email@teste.com", "11987654321");
 
-        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(null); // CNPJ inválido
+        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(null);
         when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn("11987654321");
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -92,7 +92,7 @@ public class ClienteServiceTest {
         ClienteDTO clienteDTO = new ClienteDTO("Cliente Teste", "12345678000199", "email@teste.com", "11987");
 
         when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn("12345678000199");
-        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(null); // Telefone inválido
+        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             clienteService.createCliente(clienteDTO);
@@ -108,7 +108,7 @@ public class ClienteServiceTest {
 
         when(clienteRepository.findAll()).thenReturn(Arrays.asList(cliente1, cliente2));
 
-        List<Cliente> clientes = clienteService.getCliente();
+        List<Cliente> clientes = clienteService.getAllCliente();
 
         assertNotNull(clientes);
         assertEquals(2, clientes.size());
@@ -164,7 +164,7 @@ public class ClienteServiceTest {
         when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
         when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(cnpjFormatado);
         when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(telefoneFormatado);
-        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Retorna o cliente atualizado
+        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Cliente clienteAtualizado = clienteService.updateCliente(clienteId, clienteDTO);
 
@@ -186,7 +186,7 @@ public class ClienteServiceTest {
         Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
 
         when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
-        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(null); // CNPJ inválido
+        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(null);
         when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn("61999999999");
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
@@ -205,7 +205,7 @@ public class ClienteServiceTest {
 
         when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
         when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn("12345678000199");
-        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(null); // Telefone inválido
+        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(null);
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> {
             clienteService.updateCliente(clienteId, clienteDTO);

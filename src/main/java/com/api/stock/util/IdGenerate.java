@@ -5,7 +5,7 @@ import com.api.stock.model.Endereco;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.model.Produto;
 import com.api.stock.repository.ClienteRepository;
-import com.api.stock.repository.EnderecoRespository;
+import com.api.stock.repository.EnderecoRepository;
 import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
@@ -21,7 +21,7 @@ public class IdGenerate {
     private ClienteRepository clienteRepository;
 
     @Autowired
-    private EnderecoRespository enderecoRespository;
+    private EnderecoRepository enderecoRepository;
 
     @Autowired
     private FornecedorRepository fornecedorRepository;
@@ -65,7 +65,7 @@ public class IdGenerate {
         }
 
         if(model.equalsIgnoreCase("endereco")) {
-            return enderecoRespository.findTopByOrderByIdDesc();
+            return enderecoRepository.findTopByOrderByIdDesc();
         }
 
         if(model.equalsIgnoreCase("fornecedor")) {

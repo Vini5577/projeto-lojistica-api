@@ -61,13 +61,13 @@ public class ClienteControllerTest {
                 new Cliente("C2", "Cliente B", "88888888888", "emailB@teste.com", "98765432000111")
         );
 
-        Mockito.when(clienteService.getCliente()).thenReturn(clientes);
+        Mockito.when(clienteService.getAllCliente()).thenReturn(clientes);
 
         ResponseEntity<Object> response = clienteController.getAllCliente();
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(clientes, response.getBody());
-        Mockito.verify(clienteService).getCliente();
+        Mockito.verify(clienteService).getAllCliente();
     }
 
     @Test
@@ -87,7 +87,6 @@ public class ClienteControllerTest {
 
     @Test
     void testUpdateCliente() {
-        // Dados de entrada
         String id = "C1";
         ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", null, "novoemail@teste.com", null);
 
