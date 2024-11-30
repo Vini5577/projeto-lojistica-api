@@ -51,12 +51,10 @@ public class FornecedorService {
     }
 
     public Fornecedor getOneFornecedor(String id) {
-        Optional<Fornecedor> fornecedor = fornecedorRepository.findById(id.toUpperCase());
-        if(!fornecedor.isPresent()) {
-            throw new RuntimeException("Fornecedor não encontrado");
-        }
+        Fornecedor fornecedor = fornecedorRepository.findById(id.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
 
-        return fornecedor.get();
+        return fornecedor;
     }
 
     public Fornecedor updateFornecedor(String id, FornecedorDTO fornecedorDTO) {
@@ -92,11 +90,8 @@ public class FornecedorService {
     }
 
     public void deleteFornecedor(String id) {
-        Optional<Fornecedor> clienteOptional = fornecedorRepository.findById(id.toUpperCase());
-        if(!clienteOptional.isPresent()) {
-            throw  new RuntimeException("Fornecedor não encontrado");
-        }
-
+        fornecedorRepository.findById(id.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado."));
         fornecedorRepository.deleteById(id);
     }
 

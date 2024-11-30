@@ -122,44 +122,34 @@ public class PedidoService {
     }
 
     public Pedido updateDevolucaoPedido(Integer id) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
+        Produto produto = produtoRepository.findById(pedido.getProduto().getId())
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
 
-        Pedido pedido = pedidoOptional.get();
-        Optional<Produto> produto = produtoRepository.findById(pedido.getProduto().getId());
-
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
 
         if (pedido.getStatusPedido().equals(StatusPedido.PEDIDO_ENTREGUE) ||
                 pedido.getStatusPedido().equals(StatusPedido.PROBLEMA_ENTREGA)) {
             pedido.setStatusPedido(StatusPedido.PROCESSO_DEVOLUCAO);
         } else if (pedido.getStatusPedido().equals(StatusPedido.PROCESSO_DEVOLUCAO)) {
             pedido.setStatusPedido(StatusPedido.PEDIDO_DEVOLVIDO);
-            Integer quantidade = pedido.getQtd() + produto.get().getQuantidadeDisponivel();
-            produto.get().setQuantidadeDisponivel(quantidade);
+            Integer quantidade = pedido.getQtd() + produto.getQuantidadeDisponivel();
+            produto.setQuantidadeDisponivel(quantidade);
         } else {
             throw new RuntimeException("Não é possível atualizar o status para devolução, pedido não está em um estado válido.");
         }
 
-        produtoRepository.save(produto.get());
+        produtoRepository.save(produto);
         return pedidoRepository.save(pedido);
     }
 
     public Pedido updateCancelarPedido(Integer id) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
+        Pedido pedido = pedidoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
-
-        Pedido pedido = pedidoOptional.get();
         Produto produto = produtoRepository.findById(pedido.getProduto().getId())
-                .orElseThrow(() -> new RuntimeException("Produto não encontrado"));
+                .orElseThrow(() -> new RuntimeException("Produto não encontrado."));
 
         if (pedido.getStatusPedido().equals(StatusPedido.PEDIDO_CONFIRMADO) ||
                 pedido.getStatusPedido().equals(StatusPedido.NOTA_GERADA) ||

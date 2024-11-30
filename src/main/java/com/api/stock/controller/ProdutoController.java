@@ -1,9 +1,11 @@
 package com.api.stock.controller;
 
+import com.api.stock.dto.ProdutoDTO;
 import com.api.stock.model.Produto;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.repository.ProdutoRepository;
 import com.api.stock.repository.FornecedorRepository;
+import com.api.stock.service.ProdutoService;
 import com.api.stock.util.IdGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,113 +20,52 @@ import java.util.Optional;
 public class ProdutoController {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private FornecedorRepository fornecedorRepository;
-
-    @Autowired
-    private IdGenerate idGenerate;
+    private ProdutoService produtoService;
 
     @PostMapping("/add")
-    public ResponseEntity<Object> createProduto(@RequestBody Produto produto) {
-
-        produto.setId(idGenerate.generateNextId("P", "produto"));
-
-        if (produto.getNome() == null || produto.getPreco() == null ||
-                produto.getQuantidadeDisponivel() == null || produto.getDescricao() == null ||
-                produto.getFornecedor() == null || produto.getFornecedor().getId() == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Todos os campos obrigatórios devem ser preenchidos.");
-        }
-
-        Optional<Fornecedor> fornecedorOptional = fornecedorRepository.findById(produto.getFornecedor().getId());
-        if (!fornecedorOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fornecedor não encontrado.");
-        }
-
-        produto.setFornecedor(fornecedorOptional.get());
-
+    public ResponseEntity<Object> createProduto(@RequestBody ProdutoDTO produto) {
         try {
-            Produto produtoSalvo = produtoRepository.save(produto);
-            return ResponseEntity.status(HttpStatus.OK).body(produtoSalvo);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar o produto: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.OK).body(produtoService.createProduto(produto));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @GetMapping("/get")
     public ResponseEntity<Object> getAllProduto() {
-        List<Produto> produtoList = produtoRepository.findAll();
-        return ResponseEntity.status(HttpStatus.OK).body(produtoList);
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(produtoService.getAllProduto());
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(ex.getMessage());
+        }
     }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneProduto(@PathVariable String id) {
-        Optional<Produto> produto = produtoRepository.findById(id.toUpperCase());
-        if (!produto.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(produtoService.getOneProduto(id));
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-
-        return ResponseEntity.status(HttpStatus.OK).body(produto.get());
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<String> updateProduto(@PathVariable String id, @RequestBody Produto produto) {
-        Optional<Produto> produtoOptional = produtoRepository.findById(id.toUpperCase());
-        if (!produtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-
-        Produto produtoExistente = produtoOptional.get();
-        produto.setId(produtoExistente.getId());
-
-        if (produto.getNome() == null) {
-            produto.setNome(produtoExistente.getNome());
-        }
-
-        if (produto.getPreco() == null) {
-            produto.setPreco(produtoExistente.getPreco());
-        }
-
-        if (produto.getQuantidadeDisponivel() == null) {
-            produto.setQuantidadeDisponivel(produtoExistente.getQuantidadeDisponivel());
-        }
-
-        if (produto.getDescricao() == null) {
-            produto.setDescricao(produtoExistente.getDescricao());
-        }
-
-        if (produto.getFornecedor() == null || produto.getFornecedor().getId() == null) {
-            produto.setFornecedor(produtoExistente.getFornecedor());
-        } else {
-            Optional<Fornecedor> fornecedorOptional = fornecedorRepository.findById(produto.getFornecedor().getId());
-            if (fornecedorOptional.isPresent()) {
-                produto.setFornecedor(fornecedorOptional.get());
-            } else {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Fornecedor não encontrado.");
-            }
-        }
-
+    public ResponseEntity<String> updateProduto(@PathVariable String id, @RequestBody ProdutoDTO produto) {
         try {
-            produtoRepository.save(produto);
+            produtoService.updateProduto(id, produto);
             return ResponseEntity.status(HttpStatus.OK).body("Produto atualizado com sucesso!");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao atualizar o produto: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteProduto(@PathVariable String id) {
-        Optional<Produto> produtoOptional = produtoRepository.findById(id.toUpperCase());
-        if (!produtoOptional.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não encontrado");
-        }
-
         try {
-            produtoRepository.deleteById(id.toUpperCase());
+            produtoService.deleteProduto(id);
             return ResponseEntity.status(HttpStatus.OK).body("Produto deletado com sucesso");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao deletar o produto: " + e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 }

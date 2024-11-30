@@ -50,12 +50,9 @@ public class ClienteService {
     }
 
     public Cliente getOneCliente(String id) {
-        Optional<Cliente> cliente = clienteRepository.findById(id.toUpperCase());
-        if(!cliente.isPresent()) {
-            throw new RuntimeException("Cliente não encontrado");
-        }
-
-        return  cliente.get();
+        Cliente cliente = clienteRepository.findById(id.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        return  cliente;
     }
 
     public Cliente updateCliente(String id, ClienteDTO clienteDTO) {
@@ -89,10 +86,8 @@ public class ClienteService {
     }
 
     public void deleteCliente(String id) {
-        Optional<Cliente> clienteOptional = clienteRepository.findById(id.toUpperCase());
-        if(!clienteOptional.isPresent()) {
-           throw  new RuntimeException("Cliente não encontrado");
-        }
+        Cliente clienteOptional = clienteRepository.findById(id.toUpperCase())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
         clienteRepository.deleteById(id);
     }
