@@ -28,10 +28,10 @@ public class PedidoService {
     private PedidoRepository pedidoRepository;
 
     public Pedido createPedido(PedidoDTO pedidoDTO) {
-        validarPedido(pedidoDTO);
-
         Optional<Cliente> cliente = clienteRepository.findById(pedidoDTO.getClienteId());
         Optional<Produto> produto = produtoRepository.findById(pedidoDTO.getProdutoId());
+
+        validarPedido(cliente, produto, pedidoDTO);
 
         Double valorTotal = produto.get().getPreco() * pedidoDTO.getQtd();
 
@@ -55,23 +55,11 @@ public class PedidoService {
     }
 
     public Pedido getOnePedido(Integer id) {
-        Optional<Pedido> pedido = pedidoRepository.findById(id);
-
-        if (!pedido.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
-
-        return pedido.get();
+        return pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 
     public Pedido updateStatusPedido(Integer id) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
-
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
-
-        Pedido pedido = pedidoOptional.get();
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         switch (pedido.getStatusPedido()) {
             case PEDIDO_REALIZADO:
@@ -104,13 +92,7 @@ public class PedidoService {
     }
 
     public Pedido updateProblemaPedido(Integer id) {
-        Optional<Pedido> pedidoOptional = pedidoRepository.findById(id);
-
-        if (!pedidoOptional.isPresent()) {
-            throw new RuntimeException("Pedido não encontrado");
-        }
-
-        Pedido pedido = pedidoOptional.get();
+        Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         if (pedido.getStatusPedido().equals(StatusPedido.MERCADORIA_TRANSITO)) {
             pedido.setStatusPedido(StatusPedido.PROBLEMA_ENTREGA);
@@ -167,12 +149,12 @@ public class PedidoService {
         produto.setQuantidadeDisponivel(quantidade);
 
         produtoRepository.save(produto);
-        return pedidoRepository.save(pedido);
+
+        Pedido pedidoFeito = pedidoRepository.save(pedido);
+        return pedidoFeito;
     }
 
-    private void validarPedido(PedidoDTO pedidoDTO) {
-        Optional<Cliente> cliente = clienteRepository.findById(pedidoDTO.getClienteId());
-        Optional<Produto> produto = produtoRepository.findById(pedidoDTO.getProdutoId());
+    private void validarPedido(Optional<Cliente> cliente, Optional<Produto> produto, PedidoDTO pedidoDTO) {
 
         if (!cliente.isPresent()) {
             throw new RuntimeException("Cliente não encontrado");
