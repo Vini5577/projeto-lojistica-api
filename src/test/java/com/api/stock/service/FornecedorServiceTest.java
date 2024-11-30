@@ -228,7 +228,7 @@ public class FornecedorServiceTest {
             fornecedorService.getOneFornecedor(fornecedorId);
         });
 
-        assertEquals("Fornecedor não encontrado", exception.getMessage());
+        assertEquals("Fornecedor não encontrado.", exception.getMessage());
 
         verify(fornecedorRepository, times(1)).findById(fornecedorId.toUpperCase());
     }
@@ -320,7 +320,7 @@ public class FornecedorServiceTest {
             fornecedorService.deleteFornecedor(fornecedorId);
         });
 
-        assertEquals("Fornecedor não encontrado", exception.getMessage());
+        assertEquals("Fornecedor não encontrado.", exception.getMessage());
 
         verify(fornecedorRepository, times(1)).findById(fornecedorId.toUpperCase());
         verify(fornecedorRepository, never()).deleteById(fornecedorId);
