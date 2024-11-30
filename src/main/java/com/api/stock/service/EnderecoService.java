@@ -76,12 +76,8 @@ public class EnderecoService {
     }
 
     public Endereco getOneEndereco(String id) {
-        Optional<Endereco> endereco = enderecoRepository.findById(id.toUpperCase());
-        if(!endereco.isPresent()) {
-            throw new RuntimeException("Endereço não encontrado");
-        }
-
-        return  endereco.get();
+        Endereco endereco = enderecoRepository.findById(id.toUpperCase()).orElseThrow(() -> new RuntimeException("Endereço não encontrado"));
+        return  endereco;
     }
 
     public Endereco getEnderecoByCliente(String clienteId) {

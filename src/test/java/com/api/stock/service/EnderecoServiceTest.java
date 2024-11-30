@@ -84,7 +84,6 @@ public class EnderecoServiceTest {
 
         Endereco enderecoSalvo = enderecoService.createEnderecoForCliente(enderecoDTO, enderecoDTO.getClienteId());
 
-        // Verificações
         assertNotNull(enderecoSalvo);
         assertEquals(generatedId, enderecoSalvo.getId());
         assertEquals("71000-000", enderecoSalvo.getCep());
@@ -95,6 +94,28 @@ public class EnderecoServiceTest {
         assertEquals("Complemento Teste", enderecoSalvo.getComplemento());
 
         verify(enderecoRepository, times(1)).save(any(Endereco.class));
+    }
+
+    @Test
+    public void testCreateEndereco_ClienteNaoEncontrado() {
+        String clienteId = "C1";
+        EnderecoDTO enderecoDTO = new EnderecoDTO();
+        enderecoDTO.setCep("71000-000");
+        enderecoDTO.setRua("Rua Teste");
+        enderecoDTO.setCidade("Cidade Teste");
+        enderecoDTO.setEstado("DF");
+        enderecoDTO.setBairro("Bairro Teste");
+        enderecoDTO.setNumero(100);
+        enderecoDTO.setComplemento("Complemento Teste");
+        enderecoDTO.setClienteId(clienteId);
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            enderecoService.createEnderecoForCliente(enderecoDTO, clienteId);
+        });
+
+        assertEquals("Cliente não encontrado", exception.getMessage());
     }
 
     @Test
@@ -128,6 +149,28 @@ public class EnderecoServiceTest {
         assertEquals("Complemento Teste", enderecoSalvo.getComplemento());
 
         verify(enderecoRepository, times(1)).save(any(Endereco.class));
+    }
+
+    @Test
+    public void testCreateEndereco_FornecedorNaoEncontrado() {
+        String fornecedorId = "F1";
+        EnderecoDTO enderecoDTO = new EnderecoDTO();
+        enderecoDTO.setCep("71000-000");
+        enderecoDTO.setRua("Rua Teste");
+        enderecoDTO.setCidade("Cidade Teste");
+        enderecoDTO.setEstado("DF");
+        enderecoDTO.setBairro("Bairro Teste");
+        enderecoDTO.setNumero(100);
+        enderecoDTO.setComplemento("Complemento Teste");
+        enderecoDTO.setFornecedorId(fornecedorId);
+
+        when(fornecedorRepository.findById(fornecedorId)).thenReturn(Optional.empty());
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            enderecoService.createEnderecoForFornecedor(enderecoDTO, fornecedorId);
+        });
+
+        assertEquals("Fornecedor não encontrado", exception.getMessage());
     }
 
 
