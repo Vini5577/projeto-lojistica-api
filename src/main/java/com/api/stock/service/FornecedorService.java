@@ -53,7 +53,7 @@ public class FornecedorService {
     public Fornecedor getOneFornecedor(String id) {
         Optional<Fornecedor> fornecedor = fornecedorRepository.findById(id.toUpperCase());
         if(!fornecedor.isPresent()) {
-            throw new RuntimeException("Cliente não encontrado");
+            throw new RuntimeException("Fornecedor não encontrado");
         }
 
         return fornecedor.get();

@@ -120,24 +120,19 @@ public class ClienteServiceTest {
 
     @Test
     public void testGetOneCliente_Success() {
-        // Setup dos dados de teste
         String clienteId = "C1";
         Cliente cliente = new Cliente();
         cliente.setId(clienteId);
         cliente.setNome("Cliente Teste");
 
-        // Simula o comportamento do clienteRepository.findById() para retornar um cliente
         when(clienteRepository.findById(clienteId.toUpperCase())).thenReturn(Optional.of(cliente));
 
-        // Chama o método que está sendo testado
         Cliente resultado = clienteService.getOneCliente(clienteId);
 
-        // Valida os resultados
         assertNotNull(resultado);
         assertEquals(clienteId, resultado.getId());
         assertEquals("Cliente Teste", resultado.getNome());
 
-        // Verifica se o método findById foi chamado uma vez
         verify(clienteRepository, times(1)).findById(clienteId.toUpperCase());
     }
 
@@ -155,6 +150,108 @@ public class ClienteServiceTest {
 
         verify(clienteRepository, times(1)).findById(clienteId.toUpperCase());
     }
+
+    @Test
+    public void testUpdateCliente_Success() {
+        String clienteId = "C1";
+        ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", "12345678000199", "novoemail@teste.com", "61999999999");
+
+        Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
+
+        String cnpjFormatado = "12345678000199";
+        String telefoneFormatado = "61999999999";
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
+        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(cnpjFormatado);
+        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(telefoneFormatado);
+        when(clienteRepository.save(any(Cliente.class))).thenAnswer(invocation -> invocation.getArgument(0)); // Retorna o cliente atualizado
+
+        Cliente clienteAtualizado = clienteService.updateCliente(clienteId, clienteDTO);
+
+        assertNotNull(clienteAtualizado);
+        assertEquals(clienteId, clienteAtualizado.getId());
+        assertEquals(clienteDTO.getNome(), clienteAtualizado.getNome());
+        assertEquals(cnpjFormatado, clienteAtualizado.getCnpj());
+        assertEquals(telefoneFormatado, clienteAtualizado.getTelefone());
+        assertEquals(clienteDTO.getEmail(), clienteAtualizado.getEmail());
+
+        verify(clienteRepository, times(1)).save(any(Cliente.class));
+    }
+
+    @Test
+    public void testUpdateCliente_CnpjInvalido() {
+        String clienteId = "C1";
+        ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", "12345678", "novoemail@teste.com", "61999999999");
+
+        Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
+        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn(null); // CNPJ inválido
+        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn("61999999999");
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.updateCliente(clienteId, clienteDTO);
+        });
+
+        assertEquals("CNPJ inválido, verifique novamente.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCliente_TelefoneInvalido() {
+        String clienteId = "C1";
+        ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", "12345678000199", "novoemail@teste.com", "61987");
+
+        Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
+        when(verifyUtil.validateCnpj(clienteDTO.getCnpj())).thenReturn("12345678000199");
+        when(verifyUtil.validateTelefone(clienteDTO.getTelefone())).thenReturn(null); // Telefone inválido
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.updateCliente(clienteId, clienteDTO);
+        });
+
+        assertEquals("Telefone inválido, verifique novamente.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCliente_CnpjJaRegistrado() {
+        String clienteId = "C1";
+        ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", "12345678000199", "novoemail@teste.com", "61999999999");
+
+        Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
+
+        Cliente clienteCnpjExistente = new Cliente("C2", "Cliente Existente", "12345678000199", "outroemail@teste.com", "61977777777");
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
+        when(clienteRepository.findByCnpj(clienteDTO.getCnpj())).thenReturn(Optional.of(clienteCnpjExistente));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.updateCliente(clienteId, clienteDTO);
+        });
+
+        assertEquals("CNPJ já registrado.", exception.getMessage());
+    }
+
+    @Test
+    public void testUpdateCliente_EmailJaRegistrado() {
+        String clienteId = "C1";
+        ClienteDTO clienteDTO = new ClienteDTO("Cliente Atualizado", "12345678000199", "antigoemail@teste.com", "61999999999");
+
+        Cliente clienteExistente = new Cliente(clienteId, "Cliente Antigo", "98765432000188", "antigoemail@teste.com", "61988888888");
+
+        Cliente clienteEmailExistente = new Cliente("C2", "Cliente Existente", "12345678000199", "antigoemail@teste.com", "61977777777");
+
+        when(clienteRepository.findById(clienteId)).thenReturn(Optional.of(clienteExistente));
+        when(clienteRepository.findByEmail(clienteDTO.getEmail())).thenReturn(Optional.of(clienteEmailExistente));
+
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            clienteService.updateCliente(clienteId, clienteDTO);
+        });
+
+        assertEquals("E-mail já registrado.", exception.getMessage());
+    }
+
 
     @Test
     public void testDeleteCliente_Success() {
