@@ -1,38 +1,16 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.EnderecoDTO;
-import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
-import com.api.stock.model.Fornecedor;
-import com.api.stock.repository.ClienteRepository;
-import com.api.stock.repository.EnderecoRepository;
-import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.service.EnderecoService;
-import com.api.stock.util.IdGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/endereco")
 public class EnderecoController {
-
-
-    @Autowired
-    IdGenerate idGenerate;
-
-    @Autowired
-    EnderecoRepository enderecoRepository;
-
-    @Autowired
-    ClienteRepository clienteRepository;
-
-    @Autowired
-    FornecedorRepository fornecedorRepository;
 
     @Autowired
     EnderecoService enderecoService;

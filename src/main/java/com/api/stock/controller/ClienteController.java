@@ -1,32 +1,17 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.ClienteDTO;
-import com.api.stock.model.Cliente;
-import com.api.stock.repository.ClienteRepository;
 import com.api.stock.service.ClienteService;
-import com.api.stock.util.IdGenerate;
-import com.api.stock.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/cliente")
 public class ClienteController {
 
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private VerifyUtil verifyUtil;
-
-    @Autowired
-    private IdGenerate idGenerate;
 
     @Autowired
     private ClienteService clienteService;

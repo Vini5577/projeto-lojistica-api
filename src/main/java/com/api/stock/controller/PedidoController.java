@@ -5,10 +5,6 @@ import com.api.stock.model.Cliente;
 import com.api.stock.model.Pedido;
 import com.api.stock.model.Produto;
 import com.api.stock.model.StatusPedido;
-import com.api.stock.repository.ClienteRepository;
-import com.api.stock.repository.FornecedorRepository;
-import com.api.stock.repository.PedidoRepository;
-import com.api.stock.repository.ProdutoRepository;
 import com.api.stock.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,15 +18,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/pedido")
 public class PedidoController {
-
-    @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
-    private ClienteRepository clienteRepository;
-
-    @Autowired
-    private PedidoRepository pedidoRepository;
 
     @Autowired
     private PedidoService pedidoService;
@@ -84,27 +71,12 @@ public class PedidoController {
     
     @PutMapping("/update/status/devolucao/{id}")
     public ResponseEntity<String> updateDevolucaoPedido(@PathVariable Integer id) {
-        Optional<Pedido> pedido = pedidoRepository.findById(id);
-        Optional<Produto> produto = produtoRepository.findById(pedido.get().getProduto().getId());
-
-        if(!pedido.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Pedido não encontrado!");
+        try {
+            Pedido pedidoAtualizado = pedidoService.updateDevolucaoPedido(id);
+            return ResponseEntity.status(HttpStatus.OK).body("Status do pedido atualizado para DEVOLUCAO com sucesso!");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
-
-        if(pedido.get().getStatusPedido().equals(StatusPedido.PEDIDO_ENTREGUE) ||
-                pedido.get().getStatusPedido().equals(StatusPedido.PROBLEMA_ENTREGA)) {
-            pedido.get().setStatusPedido(StatusPedido.PROCESSO_DEVOLUCAO);
-        } else if (pedido.get().getStatusPedido().equals(StatusPedido.PROCESSO_DEVOLUCAO)) {
-            pedido.get().setStatusPedido(StatusPedido.PEDIDO_DEVOLVIDO);
-            Integer quantidade = pedido.get().getQtd() + produto.get().getQuantidadeDisponivel();
-            produto.get().setQuantidadeDisponivel(quantidade);
-        }
-
-
-        produtoRepository.save(produto.get());
-        pedidoRepository.save(pedido.get());
-
-        return ResponseEntity.status(HttpStatus.OK).body("Status do pedido Atualizado com Sucesso!");
     }
 
     @PutMapping("/update/status/cancelar/{id}")
