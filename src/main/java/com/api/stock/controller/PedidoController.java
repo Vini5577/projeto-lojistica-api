@@ -110,7 +110,7 @@ public class PedidoController {
     @PutMapping("/update/status/cancelar/{id}")
     public ResponseEntity<String> updateCancelarPedido(@PathVariable Integer id) {
         try {
-            Pedido pedidoAtualizado = pedidoService.updateCancelarPedido(id);
+            pedidoService.updateCancelarPedido(id);
             return ResponseEntity.status(HttpStatus.OK).body("Pedido cancelado com sucesso!");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
