@@ -56,8 +56,7 @@ public class EnderecoController {
     @GetMapping("/cliente/{cliente_id}")
     public ResponseEntity<Object> getEnderecoByCliente(@PathVariable String cliente_id) {
         try {
-            Endereco endereco = enderecoService.getEnderecoByCliente(cliente_id);
-            return ResponseEntity.status(HttpStatus.OK).body(endereco);
+            return ResponseEntity.status(HttpStatus.OK).body(enderecoService.getEnderecoByCliente(cliente_id));
         } catch (RuntimeException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
