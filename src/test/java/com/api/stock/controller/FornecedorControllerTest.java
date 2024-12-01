@@ -1,13 +1,9 @@
 package com.api.stock.controller;
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
 
 import com.api.stock.dto.FornecedorDTO;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.model.TipoServico;
 import com.api.stock.service.FornecedorService;
-import com.api.stock.util.IdGenerate;
-import com.api.stock.util.VerifyUtil;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,15 +13,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
-import java.util.Optional;
 
 @SpringBootTest
 @ExtendWith(MockitoExtension.class)

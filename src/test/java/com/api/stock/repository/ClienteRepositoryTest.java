@@ -1,7 +1,6 @@
 package com.api.stock.repository;
 
 import com.api.stock.model.Cliente;
-import com.api.stock.repository.ClienteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

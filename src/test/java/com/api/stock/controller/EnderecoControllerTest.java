@@ -1,20 +1,11 @@
 package com.api.stock.controller;
 
-import static org.mockito.Mockito.*;
-import static org.assertj.core.api.Assertions.*;
-
-import com.api.stock.dto.ClienteDTO;
 import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.model.TipoServico;
-import com.api.stock.repository.ClienteRepository;
-import com.api.stock.service.ClienteService;
 import com.api.stock.service.EnderecoService;
-import com.api.stock.util.IdGenerate;
-import com.api.stock.util.VerifyUtil;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -136,6 +127,45 @@ public class EnderecoControllerTest {
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(endereco, response.getBody());
         Mockito.verify(enderecoService).getOneEndereco(enderecoId);
+    }
+
+    @Test
+    void testUpdateEndereco() {
+        String id = "E1";
+        EnderecoDTO enderecoDTO = new EnderecoDTO("12345-678", "Rua Atualizada", "Cidade Atualizada", "Estado Atualizado",
+                "Bairro Atualizado", 200, "Apto 202", null, "F1");
+
+        Endereco enderecoExistente = new Endereco();
+        enderecoExistente.setId(id);
+        enderecoExistente.setCep("12345-678");
+        enderecoExistente.setRua("Rua Antiga");
+        enderecoExistente.setCidade("Cidade Antiga");
+        enderecoExistente.setEstado("Estado Antigo");
+        enderecoExistente.setBairro("Bairro Antigo");
+        enderecoExistente.setNumero(100);
+        enderecoExistente.setComplemento("Apto 101");
+        enderecoExistente.setFornecedor(new Fornecedor("F1", "Fornecedor Teste", "999999999", "fornecedor@teste.com", "12345678000199", TipoServico.TRANSPORTE));
+
+        Endereco enderecoAtualizado = new Endereco();
+        enderecoAtualizado.setId(id);
+        enderecoAtualizado.setCep(enderecoDTO.getCep());
+        enderecoAtualizado.setRua(enderecoDTO.getRua());
+        enderecoAtualizado.setCidade(enderecoDTO.getCidade());
+        enderecoAtualizado.setEstado(enderecoDTO.getEstado());
+        enderecoAtualizado.setBairro(enderecoDTO.getBairro());
+        enderecoAtualizado.setNumero(enderecoDTO.getNumero());
+        enderecoAtualizado.setComplemento(enderecoDTO.getComplemento());
+        enderecoAtualizado.setFornecedor(new Fornecedor("F1", "Fornecedor Teste", "999999999", "fornecedor@teste.com", "12345678000199", TipoServico.TRANSPORTE));
+
+        Mockito.when(enderecoService.updateEndereco(id, enderecoDTO)).thenReturn(enderecoAtualizado);
+
+        ResponseEntity<String> response = enderecoController.updateEndereco(id, enderecoDTO);
+
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+
+        Assertions.assertEquals("Endereço atualizado com sucesso!", response.getBody());
+
+        Mockito.verify(enderecoService).updateEndereco(id, enderecoDTO);
     }
 
     @Test
