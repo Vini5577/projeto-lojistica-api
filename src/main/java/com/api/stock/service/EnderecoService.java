@@ -112,8 +112,13 @@ public class EnderecoService {
         if (enderecoDTO.getClienteId() != null) {
             enderecoExistente.setCliente(clienteRepository.findById(enderecoDTO.getClienteId()).get());
         }
+
         if (enderecoDTO.getFornecedorId() != null) {
             enderecoExistente.setFornecedor(fornecedorRepository.findById(enderecoDTO.getFornecedorId()).get());
+        }
+
+        if(enderecoDTO.getClienteId() != null && enderecoDTO.getFornecedorId() != null) {
+            throw new RuntimeException("Você só pode atualizar o endereço do cliente ou do fornecedor.");
         }
 
         return enderecoRepository.save(enderecoExistente);
