@@ -25,7 +25,7 @@ public class Produto {
     private Double preco;
 
     @Column(nullable = false)
-    private Integer quantidadeDisponivel;
+    private Long quantidadeDisponivel;
 
     @Column(nullable = false, length = 1000)
     private String descricao;

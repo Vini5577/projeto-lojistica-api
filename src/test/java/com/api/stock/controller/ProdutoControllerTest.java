@@ -59,13 +59,13 @@ public class ProdutoControllerTest {
     @Test
     void testCreateProduto() {
         String fornecedorId = "F1";
-        ProdutoDTO produtoDTO = new ProdutoDTO( "Produto Teste", 99.99, 10, "Descrição Teste", fornecedorId);
+        ProdutoDTO produtoDTO = new ProdutoDTO( "Produto Teste", 99.99, 10L, "Descrição Teste", fornecedorId);
 
         Produto produtoCriado = new Produto();
         produtoCriado.setId("P12345");
         produtoCriado.setNome("Produto Teste");
         produtoCriado.setPreco(99.99);
-        produtoCriado.setQuantidadeDisponivel(10);
+        produtoCriado.setQuantidadeDisponivel(10L);
         produtoCriado.setDescricao("Descrição Teste");
 
         Mockito.when(produtoService.createProduto(produtoDTO)).thenReturn(produtoCriado);
@@ -85,8 +85,8 @@ public class ProdutoControllerTest {
         Fornecedor fornecedor2 = new Fornecedor("F2", "Fornecedor B", "888888888", "fornecedorB@teste.com", "98765432000111", TipoServico.ARMAZENAMENTO);
 
         List<Produto> produtos = List.of(
-                new Produto("P1", "Produto A", 50.0, 5, "Descrição A", fornecedor1),
-                new Produto("P2", "Produto B", 75.0, 3, "Descrição B", fornecedor2)
+                new Produto("P1", "Produto A", 50.0, 5L, "Descrição A", fornecedor1),
+                new Produto("P2", "Produto B", 75.0, 3L, "Descrição B", fornecedor2)
         );
 
         Mockito.when(produtoService.getAllProduto()).thenReturn(produtos);
@@ -102,7 +102,7 @@ public class ProdutoControllerTest {
     void testGetOneProduto() {
         String id = "P1";
         Fornecedor fornecedor = new Fornecedor("F1", "Fornecedor Teste", "999999999", "fornecedor@teste.com", "12345678000199", TipoServico.TRANSPORTE);
-        Produto produto = new Produto("P1", "Produto A", 50.0, 5, "Descrição A", fornecedor);
+        Produto produto = new Produto("P1", "Produto A", 50.0, 5L, "Descrição A", fornecedor);
 
         Mockito.when(produtoService.getOneProduto(id)).thenReturn(produto);
 
@@ -116,13 +116,13 @@ public class ProdutoControllerTest {
     @Test
     void testUpdateProduto() {
         String id = "P1";
-        ProdutoDTO produtoDTO = new ProdutoDTO("Produto Atualizado", 79.99, 20, "Descrição Atualizada", "F1");
+        ProdutoDTO produtoDTO = new ProdutoDTO("Produto Atualizado", 79.99, 20L, "Descrição Atualizada", "F1");
 
         Produto produtoExistente = new Produto();
         produtoExistente.setId(id);
         produtoExistente.setNome("Produto Antigo");
         produtoExistente.setPreco(69.99);
-        produtoExistente.setQuantidadeDisponivel(5);
+        produtoExistente.setQuantidadeDisponivel(5L);
         produtoExistente.setDescricao("Descrição Antiga");
         produtoExistente.setFornecedor(new Fornecedor("F1", "Fornecedor Teste", "999999999", "fornecedor@teste.com", "12345678000199", TipoServico.TRANSPORTE));
 

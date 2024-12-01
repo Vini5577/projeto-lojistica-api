@@ -52,7 +52,7 @@ public class PedidoServiceTest {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
         when(clienteRepository.findById("C1")).thenReturn(Optional.of(cliente));
 
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
         when(produtoRepository.findById("P1")).thenReturn(Optional.of(produto));
 
         PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "NF123", 100.0, 2, null);
@@ -84,7 +84,7 @@ public class PedidoServiceTest {
 
     @Test
     public void testCreatePedido_ClienteNaoEncontrado() {
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
         PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "NF123", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
 
         when(clienteRepository.findById("C1")).thenReturn(Optional.empty());
@@ -125,8 +125,8 @@ public class PedidoServiceTest {
         Cliente cliente1 = new Cliente("C1", "Cliente 1", "12345678000199", "cliente1@email.com", "11987654321");
         Cliente cliente2 = new Cliente("C2", "Cliente 2", "98765432000188", "cliente2@email.com", "11987654322");
 
-        Produto produto1 = new Produto("P1", "Produto 1", 50.0, 10, "Descrição do produto 1", new Fornecedor());
-        Produto produto2 = new Produto("P2", "Produto 2", 100.0, 5, "Descrição do produto 2", new Fornecedor());
+        Produto produto1 = new Produto("P1", "Produto 1", 50.0, 10L, "Descrição do produto 1", new Fornecedor());
+        Produto produto2 = new Produto("P2", "Produto 2", 100.0, 5L, "Descrição do produto 2", new Fornecedor());
 
         Pedido pedido1 = new Pedido();
         pedido1.setCliente(cliente1);
@@ -160,10 +160,10 @@ public class PedidoServiceTest {
 
     @Test
     public void testGetOnePedido_Success() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
 
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -192,7 +192,7 @@ public class PedidoServiceTest {
 
     @Test
     public void testGetOnePedido_NotFound() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
 
         when(pedidoRepository.findById(pedidoId)).thenReturn(Optional.empty());
 
@@ -207,9 +207,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateStatusPedido_Success() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -234,9 +234,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateStatusPedido_TransicaoNotaGerada() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -262,7 +262,7 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateStatusPedido_PedidoNaoEncontrado() {
-        Integer pedidoId = 999;
+        Long pedidoId = 999L;
 
         when(pedidoRepository.findById(pedidoId)).thenReturn(Optional.empty());
 
@@ -277,9 +277,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateStatusPedido_PedidoEntregue() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -303,9 +303,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateProblemaPedido_Success() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -330,9 +330,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateProblemaPedido_Fail_StatusInvalido() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -357,9 +357,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateDevolucaoPedido_Success_ProcessoDevolucao() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -393,9 +393,9 @@ public class PedidoServiceTest {
     @Test
     public void testUpdateDevolucaoPedido_Success_PedidoDevolvido() {
 
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -427,9 +427,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateDevolucaoPedido_Fail_StatusInvalido() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -458,9 +458,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateCancelarPedido_Success() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -490,7 +490,7 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateCancelarPedido_Fail_PedidoNaoEncontrado() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
 
         when(pedidoRepository.findById(pedidoId)).thenReturn(Optional.empty());
 
@@ -508,9 +508,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateCancelarPedido_Fail_ProdutoNaoEncontrado() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);
@@ -538,9 +538,9 @@ public class PedidoServiceTest {
 
     @Test
     public void testUpdateCancelarPedido_Fail_EstadoInvalido() {
-        Integer pedidoId = 1;
+        Long pedidoId = 1L;
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10, "Descrição do produto", new Fornecedor());
+        Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
 
         Pedido pedido = new Pedido();
         pedido.setId(pedidoId);

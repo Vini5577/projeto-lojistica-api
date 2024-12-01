@@ -59,7 +59,7 @@ public class ProdutoService {
 
         String nome = produtoDTO.getNome() != null ? produtoDTO.getNome() : produtoExistente.getNome();
         Double preco = produtoDTO.getPreco() != null ? produtoDTO.getPreco() : produtoExistente.getPreco();
-        Integer quantidadeDisponivel = produtoDTO.getQuantidadeDisponivel() != null ? produtoDTO.getQuantidadeDisponivel() : produtoExistente.getQuantidadeDisponivel();
+        Long quantidadeDisponivel = produtoDTO.getQuantidadeDisponivel() != null ? produtoDTO.getQuantidadeDisponivel() : produtoExistente.getQuantidadeDisponivel();
         String descricao = produtoDTO.getDescricao() != null ? produtoDTO.getDescricao() : produtoExistente.getDescricao();
 
         Fornecedor fornecedor = null;

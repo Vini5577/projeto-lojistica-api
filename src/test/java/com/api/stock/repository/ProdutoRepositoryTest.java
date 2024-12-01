@@ -40,7 +40,7 @@ public class ProdutoRepositoryTest {
         produto.setId("P1");
         produto.setNome("Produto Teste");
         produto.setPreco(99.99);
-        produto.setQuantidadeDisponivel(10);
+        produto.setQuantidadeDisponivel(10L);
         produto.setDescricao("Descrição do Produto");
         produto.setFornecedor(fornecedor);
         produtoRepository.save(produto);
@@ -52,7 +52,7 @@ public class ProdutoRepositoryTest {
         produto2.setId("P2");
         produto2.setNome("Produto Teste 2");
         produto2.setPreco(49.99);
-        produto2.setQuantidadeDisponivel(5);
+        produto2.setQuantidadeDisponivel(5L);
         produto2.setDescricao("Descrição do Produto 2");
         produto2.setFornecedor(fornecedor);
         produtoRepository.save(produto2);

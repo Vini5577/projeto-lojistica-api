@@ -41,7 +41,7 @@ class ProdutoServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10, "Descrição do Produto", "F1");
+        produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10L, "Descrição do Produto", "F1");
 
         fornecedor = new Fornecedor();
         fornecedor.setId("F1");
@@ -57,7 +57,7 @@ class ProdutoServiceTest {
         produto1.setId("P1");
         produto1.setNome("Produto A");
         produto1.setPreco(10.0);
-        produto1.setQuantidadeDisponivel(100);
+        produto1.setQuantidadeDisponivel(100L);
         produto1.setDescricao("Descrição do Produto A");
         produto1.setFornecedor(fornecedor);
 
@@ -65,7 +65,7 @@ class ProdutoServiceTest {
         produto2.setId("P2");
         produto2.setNome("Produto B");
         produto2.setPreco(20.0);
-        produto2.setQuantidadeDisponivel(200);
+        produto2.setQuantidadeDisponivel(200L);
         produto2.setDescricao("Descrição do Produto B");
         produto2.setFornecedor(fornecedor);
 
@@ -156,7 +156,7 @@ class ProdutoServiceTest {
 
     @Test
     void testUpdateProduto_FornecedorNaoEncontrado() {
-        ProdutoDTO produtoDTOComFornecedorInexistente = new ProdutoDTO("Produto Atualizado", 199.99, 20, "Nova Descrição", "F2");
+        ProdutoDTO produtoDTOComFornecedorInexistente = new ProdutoDTO("Produto Atualizado", 199.99, 20L, "Nova Descrição", "F2");
 
         when(fornecedorRepository.findById("F2")).thenReturn(Optional.empty());
 
@@ -173,7 +173,7 @@ class ProdutoServiceTest {
         produtoExistente.setId("P1");
         produtoExistente.setNome("Produto Antigo");
         produtoExistente.setPreco(99.99);
-        produtoExistente.setQuantidadeDisponivel(10);
+        produtoExistente.setQuantidadeDisponivel(10L);
         produtoExistente.setDescricao("Descrição Antiga");
         produtoExistente.setFornecedor(fornecedor);
 

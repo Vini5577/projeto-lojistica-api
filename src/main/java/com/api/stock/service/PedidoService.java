@@ -35,7 +35,7 @@ public class PedidoService {
 
         Double valorTotal = produto.get().getPreco() * pedidoDTO.getQtd();
 
-        int qtdProduto = produto.get().getQuantidadeDisponivel() - pedidoDTO.getQtd();
+        Long qtdProduto = produto.get().getQuantidadeDisponivel() - pedidoDTO.getQtd();
         produto.get().setQuantidadeDisponivel(qtdProduto);
         produtoRepository.save(produto.get());
 
@@ -54,11 +54,11 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
-    public Pedido getOnePedido(Integer id) {
+    public Pedido getOnePedido(Long id) {
         return pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 
-    public Pedido updateStatusPedido(Integer id) {
+    public Pedido updateStatusPedido(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         switch (pedido.getStatusPedido()) {
@@ -91,7 +91,7 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido updateProblemaPedido(Integer id) {
+    public Pedido updateProblemaPedido(Long id) {
         Pedido pedido = pedidoRepository.findById(id).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
 
         if (pedido.getStatusPedido().equals(StatusPedido.MERCADORIA_TRANSITO)) {
@@ -103,7 +103,7 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido updateDevolucaoPedido(Integer id) {
+    public Pedido updateDevolucaoPedido(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 
@@ -116,7 +116,7 @@ public class PedidoService {
             pedido.setStatusPedido(StatusPedido.PROCESSO_DEVOLUCAO);
         } else if (pedido.getStatusPedido().equals(StatusPedido.PROCESSO_DEVOLUCAO)) {
             pedido.setStatusPedido(StatusPedido.PEDIDO_DEVOLVIDO);
-            Integer quantidade = pedido.getQtd() + produto.getQuantidadeDisponivel();
+            Long quantidade = pedido.getQtd() + produto.getQuantidadeDisponivel();
             produto.setQuantidadeDisponivel(quantidade);
         } else {
             throw new RuntimeException("Não é possível atualizar o status para devolução, pedido não está em um estado válido.");
@@ -126,7 +126,7 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public Pedido updateCancelarPedido(Integer id) {
+    public Pedido updateCancelarPedido(Long id) {
         Pedido pedido = pedidoRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Pedido não encontrado."));
 
@@ -145,7 +145,7 @@ public class PedidoService {
             throw new RuntimeException("Impossível cancelar um pedido entregue, devolvido ou já cancelado!");
         }
 
-        Integer quantidade = pedido.getQtd() + produto.getQuantidadeDisponivel();
+        Long quantidade = pedido.getQtd() + produto.getQuantidadeDisponivel();
         produto.setQuantidadeDisponivel(quantidade);
 
         produtoRepository.save(produto);

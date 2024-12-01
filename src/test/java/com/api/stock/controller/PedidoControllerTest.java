@@ -39,9 +39,9 @@ public class PedidoControllerTest {
     @Test
     void testCreatePedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
         PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "12345", 100.0, 2, null);
-        Pedido pedidoCriado = new Pedido(1, cliente, produto, "12345", 100.0, 2, null);
+        Pedido pedidoCriado = new Pedido(1L, cliente, produto, "12345", 100.0, 2, null);
 
         Mockito.when(pedidoService.createPedido(pedidoDTO)).thenReturn(pedidoCriado);
 
@@ -55,11 +55,11 @@ public class PedidoControllerTest {
     @Test
     void testGetAllPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
         
         List<Pedido> pedidos = List.of(
-                new Pedido(1, cliente, produto, "12345", 100.0, 2, null),
-                new Pedido(2, cliente, produto, "12346", 150.0, 1, null)
+                new Pedido(1L, cliente, produto, "12345", 100.0, 2, null),
+                new Pedido(2L, cliente, produto, "12346", 150.0, 1, null)
         );
 
         Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidos);
@@ -74,81 +74,81 @@ public class PedidoControllerTest {
     @Test
     void testGetOnePedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
         
-        Pedido pedido = new Pedido(1, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
+        Pedido pedido = new Pedido(1L, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
         
-        Mockito.when(pedidoService.getOnePedido(1)).thenReturn(pedido);
+        Mockito.when(pedidoService.getOnePedido(1L)).thenReturn(pedido);
         
-        ResponseEntity<Object> response = pedidoController.getOnePedido(1);
+        ResponseEntity<Object> response = pedidoController.getOnePedido(1L);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(pedido, response.getBody());
-        Mockito.verify(pedidoService).getOnePedido(1);
+        Mockito.verify(pedidoService).getOnePedido(1L);
     }
 
     @Test
     void testUpdateStatusPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
-        Pedido pedidoExistente = new Pedido(1, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
+        Pedido pedidoExistente = new Pedido(1L, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
 
-        Mockito.when(pedidoService.updateStatusPedido(1)).thenReturn(pedidoExistente);
+        Mockito.when(pedidoService.updateStatusPedido(1L)).thenReturn(pedidoExistente);
 
-        ResponseEntity<String> response = pedidoController.updateStatusPedido(1);
+        ResponseEntity<String> response = pedidoController.updateStatusPedido(1L);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Status do pedido atualizado com sucesso!", response.getBody());
-        Mockito.verify(pedidoService).updateStatusPedido(1);
+        Mockito.verify(pedidoService).updateStatusPedido(1L);
     }
 
     @Test
     void testUpdateProblemaPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
-        Pedido pedidoExistente = new Pedido(1, cliente, produto, "12345", 100.0, 2, StatusPedido.MERCADORIA_TRANSITO);
+        Pedido pedidoExistente = new Pedido(1L, cliente, produto, "12345", 100.0, 2, StatusPedido.MERCADORIA_TRANSITO);
 
-        Mockito.when(pedidoService.updateProblemaPedido(1)).thenReturn(pedidoExistente);
+        Mockito.when(pedidoService.updateProblemaPedido(1L)).thenReturn(pedidoExistente);
 
-        ResponseEntity<String> response = pedidoController.updateProblemaPedido(1);
+        ResponseEntity<String> response = pedidoController.updateProblemaPedido(1L);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Status do pedido atualizado para PROBLEMA_ENTREGA com sucesso!", response.getBody());
-        Mockito.verify(pedidoService).updateProblemaPedido(1);
+        Mockito.verify(pedidoService).updateProblemaPedido(1L);
     }
 
     @Test
     void testUpdateDevolucaoPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
-        Pedido pedidoExistente = new Pedido(1, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_ENTREGUE);
+        Pedido pedidoExistente = new Pedido(1L, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_ENTREGUE);
 
-        Mockito.when(pedidoService.updateDevolucaoPedido(1)).thenReturn(pedidoExistente);
+        Mockito.when(pedidoService.updateDevolucaoPedido(1L)).thenReturn(pedidoExistente);
 
-        ResponseEntity<String> response = pedidoController.updateDevolucaoPedido(1);
+        ResponseEntity<String> response = pedidoController.updateDevolucaoPedido(1L);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Status do pedido atualizado para DEVOLUCAO com sucesso!", response.getBody());
-        Mockito.verify(pedidoService).updateDevolucaoPedido(1);
+        Mockito.verify(pedidoService).updateDevolucaoPedido(1L);
     }
 
     @Test
     void testUpdateCancelarPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50, "Descrição do Produto", null);
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
-        Pedido pedidoExistente = new Pedido(1, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_CONFIRMADO);
+        Pedido pedidoExistente = new Pedido(1L, cliente, produto, "12345", 100.0, 2, StatusPedido.PEDIDO_CONFIRMADO);
 
-        Mockito.when(pedidoService.updateCancelarPedido(1)).thenReturn(pedidoExistente);
+        Mockito.when(pedidoService.updateCancelarPedido(1L)).thenReturn(pedidoExistente);
 
-        ResponseEntity<String> response = pedidoController.updateCancelarPedido(1);
+        ResponseEntity<String> response = pedidoController.updateCancelarPedido(1L);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals("Pedido cancelado com sucesso!", response.getBody());
 
-        Mockito.verify(pedidoService).updateCancelarPedido(1);
+        Mockito.verify(pedidoService).updateCancelarPedido(1L);
     }
 }
