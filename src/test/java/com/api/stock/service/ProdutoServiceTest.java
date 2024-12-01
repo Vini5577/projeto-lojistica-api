@@ -32,6 +32,7 @@ class ProdutoServiceTest {
     @Mock
     private IdGenerate idGenerate;
 
+    private ProdutoDTO produtoDTO;
     private Fornecedor fornecedor;
     private Produto produto1;
     private Produto produto2;
@@ -40,6 +41,7 @@ class ProdutoServiceTest {
     public void setUp() {
         MockitoAnnotations.openMocks(this);
 
+        produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10, "Descrição do Produto", "F1");
 
         fornecedor = new Fornecedor();
         fornecedor.setId("F1");
@@ -74,7 +76,6 @@ class ProdutoServiceTest {
 
     @Test
     void testCreateProduto() {
-        ProdutoDTO produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10, "Descrição do Produto", "F1");
         Produto produto = new Produto();
         produto.setId("P1");
         produto.setNome(produtoDTO.getNome());
@@ -103,7 +104,6 @@ class ProdutoServiceTest {
     @Test
     void testCreateProdutoFornecedorNotFound() {
         when(fornecedorRepository.findById("F1")).thenReturn(Optional.empty());
-        ProdutoDTO produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10, "Descrição do Produto", "F1");
 
         assertThatThrownBy(() -> produtoService.createProduto(produtoDTO))
                 .isInstanceOf(RuntimeException.class)
@@ -145,7 +145,6 @@ class ProdutoServiceTest {
 
     @Test
     void testUpdateProduto_ProdutoNaoEncontrado() {
-        ProdutoDTO produtoDTO = new ProdutoDTO("Produto Teste", 99.99, 10, "Descrição do Produto", "F1");
         when(produtoRepository.findById("P2")).thenReturn(Optional.empty());
 
         assertThatThrownBy(() -> produtoService.updateProduto("P2", produtoDTO))
