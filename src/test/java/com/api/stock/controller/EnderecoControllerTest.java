@@ -1,5 +1,6 @@
 package com.api.stock.controller;
 
+import com.api.stock.dto.EnderecoAddDTO;
 import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
@@ -40,8 +41,8 @@ public class EnderecoControllerTest {
     @Test
     void testCreateEnderecoForFornecedor() {
         String fornecedorId = "F1";
-        EnderecoDTO enderecoDTO = new EnderecoDTO("12345-678", "Rua Teste", "Cidade Teste", "Estado Teste",
-                "Bairro Teste", 100, "Apto 10", null, fornecedorId);
+        EnderecoAddDTO enderecoDTO = new EnderecoAddDTO("12345-678", "Rua Teste", "Cidade Teste", "Estado Teste",
+                "Bairro Teste", 100, "Apto 10");
 
         Mockito.when(enderecoService.createEnderecoForFornecedor(enderecoDTO, fornecedorId)).thenReturn(null);
 

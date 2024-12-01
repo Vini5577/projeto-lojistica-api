@@ -1,5 +1,6 @@
 package com.api.stock.service;
 
+import com.api.stock.dto.EnderecoAddDTO;
 import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
@@ -115,7 +116,7 @@ public class EnderecoServiceTest {
     @Test
     public void testSalvarEnderecoFornecedor_Sucesso() {
         Fornecedor fornecedorExistente = new Fornecedor("F1", "Fornecedor Antigo", "98765432000188", "antigoemail@teste.com", "61988888888", TipoServico.TRANSPORTE);
-        EnderecoDTO enderecoDTO = new EnderecoDTO();
+        EnderecoAddDTO enderecoDTO = new EnderecoAddDTO();
         enderecoDTO.setCep("71000-000");
         enderecoDTO.setRua("Rua Teste");
         enderecoDTO.setCidade("Cidade Teste");
@@ -123,7 +124,6 @@ public class EnderecoServiceTest {
         enderecoDTO.setBairro("Bairro Teste");
         enderecoDTO.setNumero(100);
         enderecoDTO.setComplemento("Complemento Teste");
-        enderecoDTO.setFornecedorId("F1");
 
         when(fornecedorRepository.findById("F1")).thenReturn(Optional.of(fornecedorExistente));
         String generatedId = "E1";
@@ -131,7 +131,7 @@ public class EnderecoServiceTest {
 
         when(enderecoRepository.save(any(Endereco.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Endereco enderecoSalvo = enderecoService.createEnderecoForFornecedor(enderecoDTO, enderecoDTO.getFornecedorId());
+        Endereco enderecoSalvo = enderecoService.createEnderecoForFornecedor(enderecoDTO, fornecedorExistente.getId());
 
         assertNotNull(enderecoSalvo);
         assertEquals(generatedId, enderecoSalvo.getId());
@@ -148,7 +148,7 @@ public class EnderecoServiceTest {
     @Test
     public void testCreateEndereco_FornecedorNaoEncontrado() {
         String fornecedorId = "F1";
-        EnderecoDTO enderecoDTO = new EnderecoDTO();
+        EnderecoAddDTO enderecoDTO = new EnderecoAddDTO();
         enderecoDTO.setCep("71000-000");
         enderecoDTO.setRua("Rua Teste");
         enderecoDTO.setCidade("Cidade Teste");
@@ -156,7 +156,6 @@ public class EnderecoServiceTest {
         enderecoDTO.setBairro("Bairro Teste");
         enderecoDTO.setNumero(100);
         enderecoDTO.setComplemento("Complemento Teste");
-        enderecoDTO.setFornecedorId(fornecedorId);
 
         when(fornecedorRepository.findById(fornecedorId)).thenReturn(Optional.empty());
 

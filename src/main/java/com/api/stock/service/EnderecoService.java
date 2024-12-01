@@ -1,5 +1,6 @@
 package com.api.stock.service;
 
+import com.api.stock.dto.EnderecoAddDTO;
 import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
@@ -50,7 +51,7 @@ public class EnderecoService {
         return enderecoRepository.save(endereco);
     }
 
-    public Endereco createEnderecoForFornecedor(EnderecoDTO enderecoDTO, String fornecedorId) {
+    public Endereco createEnderecoForFornecedor(EnderecoAddDTO enderecoDTO, String fornecedorId) {
 
         Fornecedor fornecedor = fornecedorRepository.findById(fornecedorId)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));

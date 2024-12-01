@@ -1,5 +1,6 @@
 package com.api.stock.controller;
 
+import com.api.stock.dto.EnderecoAddDTO;
 import com.api.stock.dto.EnderecoDTO;
 import com.api.stock.model.Endereco;
 import com.api.stock.service.EnderecoService;
@@ -16,7 +17,7 @@ public class EnderecoController {
     EnderecoService enderecoService;
 
     @PostMapping("/add/fornecedor/{fornecedor_id}")
-    public ResponseEntity<Object> createEnderecoForFornecedor(@RequestBody EnderecoDTO enderecoDTO, @PathVariable String fornecedor_id) {
+    public ResponseEntity<Object> createEnderecoForFornecedor(@RequestBody EnderecoAddDTO enderecoDTO, @PathVariable String fornecedor_id) {
         try {
             Endereco enderecoSalvo = enderecoService.createEnderecoForFornecedor(enderecoDTO, fornecedor_id);
             return ResponseEntity.status(HttpStatus.CREATED).body(enderecoSalvo);
@@ -72,6 +73,7 @@ public class EnderecoController {
         }
     }
 
+    @PutMapping("/update/{id}")
     public ResponseEntity<String> updateEndereco(@PathVariable String id, @RequestBody EnderecoDTO enderecoDTO) {
         try {
             enderecoService.updateEndereco(id, enderecoDTO);

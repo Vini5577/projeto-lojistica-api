@@ -1,6 +1,5 @@
 package com.api.stock.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EnderecoDTO {
+public class EnderecoAddDTO {
     private String cep;
     private String rua;
     private String cidade;
@@ -16,6 +15,4 @@ public class EnderecoDTO {
     private String bairro;
     private Integer numero;
     private String complemento;
-    private String clienteId;
-    private String fornecedorId;
 }
