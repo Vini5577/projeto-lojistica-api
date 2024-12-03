@@ -56,7 +56,7 @@ public class FornecedorController {
     public ResponseEntity<String> deleteFornecedor(@PathVariable String id) {
         try {
             fornecedorService.deleteFornecedor(id);
-            return ResponseEntity.status(HttpStatus.OK).body("Cliente deletado com sucesso");
+            return ResponseEntity.status(HttpStatus.OK).body("Fornecedor deletado com sucesso");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
