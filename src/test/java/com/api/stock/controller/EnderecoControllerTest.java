@@ -20,6 +20,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,18 +57,21 @@ public class EnderecoControllerTest {
     void testGetEnderecoByFornecedor() {
         String fornecedorId = "F1";
 
-        Endereco endereco = new Endereco("E1", "12345-678", "Rua Teste", "Cidade Teste", "Estado Teste", "Bairro Teste", 100, "Apto 10",
-                        null, new Fornecedor("F1", "teste fornecedor", "11998765432", "teste@teste.com.br", "11222333000144", TipoServico.TRANSPORTE));
+        List<Endereco> enderecos = List.of(
+                new Endereco("E1", "12345-678", "Rua Teste", "Cidade Teste", "Estado Teste", "Bairro Teste", 100, "Apto 10",
+                        null, new Fornecedor("F1", "teste fornecedor", "11998765432", "teste@teste.com.br", "11222333000144", TipoServico.TRANSPORTE)),
+                new Endereco("E2", "98765-432", "Avenida Teste", "Outra Cidade", "Outro Estado", "Outro Bairro", 200, "Bloco B",
+                        null, new Fornecedor("F1", "teste fornecedor", "11998765432", "teste@teste.com.br", "11222333000144", TipoServico.TRANSPORTE))
+        );
 
-        Mockito.when(enderecoService.getEnderecoByFornecedor(fornecedorId)).thenReturn(endereco);
+        Mockito.when(enderecoService.getEnderecoByFornecedor(fornecedorId)).thenReturn(enderecos);
 
         ResponseEntity<Object> response = enderecoController.getEnderecoByFornecedor(fornecedorId);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals(endereco, response.getBody());
+        Assertions.assertEquals(enderecos, response.getBody());
         Mockito.verify(enderecoService).getEnderecoByFornecedor(fornecedorId);
     }
-
     @Test
     void testCreateEnderecoForCliente() {
         String clienteId = "C1";
@@ -85,15 +89,18 @@ public class EnderecoControllerTest {
     @Test
     void testGetEnderecoByCliente() {
         String clienteId = "C1";
-        Endereco endereco = new Endereco("E2", "98765-432", "Avenida Exemplo", "Cidade Exemplo", "Estado Exemplo", "Bairro Exemplo", 200,
-                null, new Cliente("C1", "teste", "11987654325", "teste@teste.com", "12345678000192"), null);
+        Endereco endereco1 = new Endereco("E1", "12345-678", "Rua Exemplo 1", "Cidade Exemplo 1", "Estado Exemplo 1", "Bairro Exemplo 1", 100,
+                null, new Cliente("C1", "Teste 1", "11912345678", "teste1@teste.com", "12345678000192"), null);
+        Endereco endereco2 = new Endereco("E2", "98765-432", "Avenida Exemplo 2", "Cidade Exemplo 2", "Estado Exemplo 2", "Bairro Exemplo 2", 200,
+                null, new Cliente("C1", "Teste 1", "11912345678", "teste1@teste.com", "12345678000192"), null);
 
-        Mockito.when(enderecoService.getEnderecoByCliente(clienteId)).thenReturn(endereco);
+        List<Endereco> enderecos = Arrays.asList(endereco1, endereco2);
 
+        Mockito.when(enderecoService.getEnderecoByCliente(clienteId)).thenReturn(enderecos);
         ResponseEntity<Object> response = enderecoController.getEnderecoByCliente(clienteId);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals(endereco, response.getBody());
+        Assertions.assertEquals(enderecos, response.getBody());
         Mockito.verify(enderecoService).getEnderecoByCliente(clienteId);
     }
 

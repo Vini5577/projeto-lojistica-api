@@ -81,20 +81,18 @@ public class EnderecoService {
         return  endereco;
     }
 
-    public Endereco getEnderecoByCliente(String clienteId) {
-        Cliente cliente = clienteRepository.findById(clienteId)
+    public List<Endereco> getEnderecoByCliente(String clienteId) {
+       clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        return enderecoRepository.findByCliente(cliente)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para o Cliente"));
+       return enderecoRepository.selecionaEnderecoCliente(clienteId);
     }
 
-    public Endereco getEnderecoByFornecedor(String fornecedorId) {
-        Fornecedor fornecedor = fornecedorRepository.findById(fornecedorId)
+    public List<Endereco> getEnderecoByFornecedor(String fornecedorId) {
+        fornecedorRepository.findById(fornecedorId)
                 .orElseThrow(() -> new RuntimeException("Fornecedor não encontrado"));
 
-        return enderecoRepository.findByFornecedor(fornecedor)
-                .orElseThrow(() -> new RuntimeException("Endereço não encontrado para o Fornecedor"));
+        return enderecoRepository.selecionaEnderecoFornecedor(fornecedorId);
     }
 
     public Endereco updateEndereco(String id, EnderecoDTO enderecoDTO) {
@@ -109,16 +107,20 @@ public class EnderecoService {
         enderecoExistente.setRua(enderecoDTO.getRua() != null ? enderecoDTO.getRua() : enderecoExistente.getRua());
         enderecoExistente.setBairro(enderecoDTO.getBairro() != null ? enderecoDTO.getBairro() : enderecoExistente.getBairro());
 
+        if(enderecoDTO.getClienteId() != null && enderecoDTO.getFornecedorId() != null) {
+            throw new RuntimeException("Você só pode atualizar o endereço do cliente ou do fornecedor.");
+        }
+
         if (enderecoDTO.getClienteId() != null) {
-            enderecoExistente.setCliente(clienteRepository.findById(enderecoDTO.getClienteId()).get());
+            Endereco enderecoCliente = enderecoRepository.verificarEnderecoCliente(enderecoDTO.getClienteId(), enderecoExistente.getId());
+            if(enderecoCliente != null) enderecoExistente.setCliente(clienteRepository.findById(enderecoDTO.getClienteId()).get());
+            else throw new RuntimeException("Endereço não pertence ao cliente.");
         }
 
         if (enderecoDTO.getFornecedorId() != null) {
-            enderecoExistente.setFornecedor(fornecedorRepository.findById(enderecoDTO.getFornecedorId()).get());
-        }
-
-        if(enderecoDTO.getClienteId() != null && enderecoDTO.getFornecedorId() != null) {
-            throw new RuntimeException("Você só pode atualizar o endereço do cliente ou do fornecedor.");
+            Endereco enderecoFornecedor = enderecoRepository.verificarEnderecoFornecedor(enderecoDTO.getFornecedorId(), enderecoExistente.getId());
+            if(enderecoFornecedor != null) enderecoExistente.setFornecedor(fornecedorRepository.findById(enderecoDTO.getFornecedorId()).get());
+            else throw new RuntimeException("Endereço não pertence ao fornecedor.");
         }
 
         return enderecoRepository.save(enderecoExistente);
