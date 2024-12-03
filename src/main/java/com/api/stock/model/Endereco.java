@@ -38,12 +38,10 @@ public class Endereco {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id", nullable = true)
-    @JsonIgnore
     private Cliente cliente;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "fornecedor_id", nullable = true)
-    @JsonIgnore
     private Fornecedor fornecedor;
 
 }
