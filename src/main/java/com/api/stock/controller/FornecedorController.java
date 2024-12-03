@@ -46,7 +46,7 @@ public class FornecedorController {
     public ResponseEntity<String> updateFornecedor(@PathVariable String id, @RequestBody FornecedorDTO fornecedor) {
         try {
             fornecedorService.updateFornecedor(id, fornecedor);
-            return ResponseEntity.status(HttpStatus.OK).body("Cliente atualizado com sucesso!");
+            return ResponseEntity.status(HttpStatus.OK).body("Fornecedor atualizado com sucesso!");
         } catch (Exception ex) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
         }
