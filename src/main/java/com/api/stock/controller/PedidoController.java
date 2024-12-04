@@ -1,19 +1,12 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.PedidoDTO;
-import com.api.stock.model.Cliente;
 import com.api.stock.model.Pedido;
-import com.api.stock.model.Produto;
-import com.api.stock.model.StatusPedido;
 import com.api.stock.service.PedidoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/pedido")

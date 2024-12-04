@@ -42,7 +42,6 @@ public class PedidoService {
         Pedido pedido = new Pedido();
         pedido.setCliente(cliente.get());
         pedido.setProduto(produto.get());
-        pedido.setNotaFiscal(pedidoDTO.getNotaFiscal());
         pedido.setValor(valorTotal);
         pedido.setQtd(pedidoDTO.getQtd());
         pedido.setStatusPedido(StatusPedido.PEDIDO_REALIZADO);

@@ -1,12 +1,7 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.ProdutoDTO;
-import com.api.stock.model.Produto;
-import com.api.stock.model.Fornecedor;
-import com.api.stock.repository.ProdutoRepository;
-import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.service.ProdutoService;
-import com.api.stock.util.IdGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

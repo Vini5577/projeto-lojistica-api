@@ -3,8 +3,6 @@ package com.api.stock.repository;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Endereco;
 import com.api.stock.model.Fornecedor;
-import jakarta.persistence.Entity;
-import jakarta.persistence.NamedQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
