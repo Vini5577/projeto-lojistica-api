@@ -2,6 +2,10 @@ package com.api.stock.controller;
 
 import com.api.stock.dto.ClienteDTO;
 import com.api.stock.service.ClienteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
+@Tag(name = "Cliente", description = "API para gerenciamento de clientes")
 @RequestMapping("/cliente")
 public class ClienteController {
 
@@ -16,6 +22,11 @@ public class ClienteController {
     @Autowired
     private ClienteService clienteService;
 
+    @Operation(summary = "Adiciona um novo cliente", description = "Cria um cliente a partir de um objeto ClienteDTO.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao criar o cliente")
+    })
     @PostMapping("/add")
     public ResponseEntity<Object> createCliente(@RequestBody ClienteDTO clienteDTO) {
         try {
@@ -25,6 +36,11 @@ public class ClienteController {
         }
     }
 
+    @Operation(summary = "Lista todos os clientes", description = "Retorna uma lista de todos os clientes cadastrados.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Lista de clientes recuperada com sucesso"),
+            @ApiResponse(responseCode = "204", description = "Nenhum cliente encontrado")
+    })
     @GetMapping("/get")
     public ResponseEntity<Object> getAllCliente() {
         try {
@@ -34,6 +50,12 @@ public class ClienteController {
         }
     }
 
+
+    @Operation(summary = "Busca um cliente pelo ID", description = "Retorna os detalhes de um cliente específico pelo ID fornecido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente encontrado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
     @GetMapping("/get/{id}")
     public ResponseEntity<Object> getOneCliente(@PathVariable String id) {
         try {
@@ -43,6 +65,11 @@ public class ClienteController {
         }
     }
 
+    @Operation(summary = "Atualiza um cliente", description = "Atualiza os dados de um cliente existente pelo ID fornecido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Erro ao atualizar o cliente")
+    })
     @PutMapping("/update/{id}")
     public ResponseEntity<String> updateCliente(@PathVariable String id, @RequestBody ClienteDTO cliente) {
         try {
@@ -53,6 +80,11 @@ public class ClienteController {
         }
     }
 
+    @Operation(summary = "Deleta um cliente", description = "Remove um cliente do sistema pelo ID fornecido.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Cliente deletado com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
+    })
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteCliente(@PathVariable String id) {
         try {
