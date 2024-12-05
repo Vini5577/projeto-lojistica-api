@@ -48,6 +48,7 @@ public class PedidoController {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ex.getMessage());
         }
     }
+
     @Operation(summary = "Recupera um pedido pelo ID", description = "Obtém os detalhes de um pedido específico pelo ID fornecido.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pedido encontrado"),

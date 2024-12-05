@@ -1,5 +1,6 @@
 package com.api.stock.service;
 
+import com.api.stock.dto.PedidoClienteDTO;
 import com.api.stock.dto.PedidoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Pedido;
@@ -9,14 +10,20 @@ import com.api.stock.repository.ClienteRepository;
 import com.api.stock.repository.PedidoRepository;
 import com.api.stock.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class PedidoService {
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
     @Autowired
     private ProdutoRepository produtoRepository;
@@ -49,8 +56,33 @@ public class PedidoService {
         return pedidoRepository.save(pedido);
     }
 
-    public List<Pedido> getAllPedidos() {
-        return pedidoRepository.findAll();
+    public List<PedidoClienteDTO> getAllPedidos() {
+        // SQL da consulta
+        String sql = "SELECT " +
+                "c.nome, " +
+                "p.nota_fiscal AS notaFiscal, " +
+                "p.status_pedido AS statusPedido, " +
+                "p.qtd, " +
+                "p.valor, " +
+                "r.descricao AS descricao " +
+                "FROM tbl_pedido AS p " +
+                "INNER JOIN tbl_cliente AS c ON p.cliente_id = c.id " +
+                "INNER JOIN tbl_produto AS r ON p.produto_id = r.id";
+
+        List<PedidoClienteDTO> pedidos = jdbcTemplate.query(sql, this::mapRow);
+        System.out.println("Pedidos retornados: " + pedidos);
+        return pedidos;
+    }
+
+    public PedidoClienteDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new PedidoClienteDTO(
+                rs.getString("nome"),
+                rs.getString("notaFiscal"),
+                rs.getString("statusPedido"),
+                rs.getInt("qtd"),
+                rs.getDouble("valor"),
+                rs.getString("descricao")
+        );
     }
 
     public Pedido getOnePedido(Long id) {
