@@ -1,6 +1,5 @@
 package com.api.stock.repository;
 
-import com.api.stock.model.Fornecedor;
 import com.api.stock.model.Produto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

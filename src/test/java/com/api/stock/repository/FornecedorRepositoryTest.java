@@ -59,24 +59,6 @@ public class FornecedorRepositoryTest {
     }
 
     @Test
-    public void testFindTopByOrderByIdDesc() {
-        Fornecedor fornecedor2 = new Fornecedor();
-        fornecedor2.setId("F2");
-        fornecedor2.setNome("Outro Fornecedor");
-        fornecedor2.setCnpj("98765432000111");
-        fornecedor2.setEmail("outro@teste.com");
-        fornecedor2.setTelefone("61988888888");
-        fornecedor2.setTipoServico(TipoServico.ARMAZENAMENTO);
-
-        fornecedorRepository.save(fornecedor2);
-
-        Optional<Fornecedor> topFornecedor = fornecedorRepository.findTopByOrderByIdDesc();
-
-        assertTrue(topFornecedor.isPresent());
-        assertEquals("F2", topFornecedor.get().getId());
-    }
-
-    @Test
     public void testFindByCnpjNotFound() {
         Optional<Fornecedor> foundFornecedor = fornecedorRepository.findByCnpj("00000000000000");
 

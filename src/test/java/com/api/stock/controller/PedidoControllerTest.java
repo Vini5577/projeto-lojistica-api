@@ -40,7 +40,7 @@ public class PedidoControllerTest {
     void testCreatePedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
         Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
-        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "12345", 100.0, 2, null);
+        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", 2);
         Pedido pedidoCriado = new Pedido(1L, cliente, produto, "12345", 100.0, 2, null);
 
         Mockito.when(pedidoService.createPedido(pedidoDTO)).thenReturn(pedidoCriado);

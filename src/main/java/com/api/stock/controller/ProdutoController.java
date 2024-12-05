@@ -1,10 +1,6 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.ProdutoDTO;
-import com.api.stock.model.Produto;
-import com.api.stock.model.Fornecedor;
-import com.api.stock.repository.ProdutoRepository;
-import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.service.ProdutoService;
 import com.api.stock.util.IdGenerate;
 import io.swagger.v3.oas.annotations.Operation;

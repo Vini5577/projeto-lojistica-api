@@ -55,7 +55,7 @@ public class PedidoServiceTest {
         Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
         when(produtoRepository.findById("P1")).thenReturn(Optional.of(produto));
 
-        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "NF123", 100.0, 2, null);
+        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", 2);
 
         Pedido pedidoSalvo = new Pedido();
         pedidoSalvo.setCliente(cliente);
@@ -85,7 +85,7 @@ public class PedidoServiceTest {
     @Test
     public void testCreatePedido_ClienteNaoEncontrado() {
         Produto produto = new Produto("P1", "Produto Teste", 50.0, 10L, "Descrição do produto", new Fornecedor());
-        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "NF123", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
+        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1",  2);
 
         when(clienteRepository.findById("C1")).thenReturn(Optional.empty());
 
@@ -102,7 +102,7 @@ public class PedidoServiceTest {
 
     @Test
     public void testCreatePedido_ProdutoNaoEncontrado() {
-        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", "NF123", 100.0, 2, StatusPedido.PEDIDO_REALIZADO);
+        PedidoDTO pedidoDTO = new PedidoDTO("C1", "P1", 2);
 
         Cliente cliente = new Cliente("C1", "Cliente Teste", "11987654321", "email@teste.com", "12345678000199");
         when(clienteRepository.findById("C1")).thenReturn(Optional.of(cliente));

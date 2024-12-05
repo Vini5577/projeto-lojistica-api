@@ -1,15 +1,12 @@
 package com.api.stock.service;
 
 import com.api.stock.dto.FornecedorDTO;
-import com.api.stock.model.Cliente;
 import com.api.stock.model.Fornecedor;
 import com.api.stock.model.TipoServico;
 import com.api.stock.repository.FornecedorRepository;
 import com.api.stock.util.IdGenerate;
 import com.api.stock.util.VerifyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
