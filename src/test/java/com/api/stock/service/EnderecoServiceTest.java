@@ -210,12 +210,9 @@ public class EnderecoServiceTest {
         enderecoExistente.setComplemento("Complemento Teste");
         enderecoExistente.setCliente(cliente);
 
-        Endereco enderecoExistente2 = new Endereco(enderecoId, "71000-000", "Rua Teste", "Cidade Teste", "DF", "Bairro Teste", 100, "Complemento Teste", cliente, null);
-
-        when(enderecoRepository.findById(enderecoId)).thenReturn(Optional.of(enderecoExistente2));
-
+        when(enderecoRepository.findById(enderecoId)).thenReturn(Optional.of(enderecoExistente));
         when(clienteRepository.findById("C1")).thenReturn(Optional.of(cliente));
-
+        when(enderecoRepository.verificarEnderecoCliente("C1", enderecoId)).thenReturn(enderecoExistente);
         when(enderecoRepository.save(any(Endereco.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         Endereco enderecoAtualizado = enderecoService.updateEndereco(enderecoId, enderecoDTO);
@@ -229,6 +226,7 @@ public class EnderecoServiceTest {
         assertEquals(enderecoDTO.getComplemento(), enderecoAtualizado.getComplemento());
 
         verify(enderecoRepository, times(1)).save(any(Endereco.class));
+        verify(enderecoRepository, times(1)).verificarEnderecoCliente("C1", enderecoId);
     }
 
     @Test

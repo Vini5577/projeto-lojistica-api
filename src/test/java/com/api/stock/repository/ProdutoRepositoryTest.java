@@ -64,14 +64,6 @@ public class ProdutoRepositoryTest {
     }
 
     @Test
-    public void testFindTopByOrderByIdDescWhenNoProducts() {
-        produtoRepository.deleteAll();
-
-        Optional<Produto> topProduto = produtoRepository.findTopByOrderByIdDesc();
-
-    }
-
-    @Test
     public void testFindById() {
         Optional<Produto> foundProduto = produtoRepository.findById("P1");
 

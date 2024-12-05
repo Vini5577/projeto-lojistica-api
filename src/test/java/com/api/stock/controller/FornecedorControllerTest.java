@@ -103,7 +103,7 @@ public class FornecedorControllerTest {
         ResponseEntity<String> response = fornecedorController.updateFornecedor(id, fornecedorDTO);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals("Cliente atualizado com sucesso!", response.getBody());
+        Assertions.assertEquals("Fornecedor atualizado com sucesso!", response.getBody());
         Mockito.verify(fornecedorService).updateFornecedor(id, fornecedorDTO);
     }
 
@@ -116,7 +116,7 @@ public class FornecedorControllerTest {
         ResponseEntity<String> response = fornecedorController.deleteFornecedor(id);
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals("Cliente deletado com sucesso", response.getBody());
+        Assertions.assertEquals("Fornecedor deletado com sucesso", response.getBody());
         Mockito.verify(fornecedorService).deleteFornecedor(id);
     }
 }
