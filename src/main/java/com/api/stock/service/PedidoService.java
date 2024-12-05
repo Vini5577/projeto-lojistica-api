@@ -74,11 +74,13 @@ public class PedidoService {
     }
 
     public PedidoClienteDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+        int statusPedidoId = rs.getInt("statusPedido");
+        StatusPedido statusPedido = StatusPedido.values()[statusPedidoId];
         return new PedidoClienteDTO(
                 rs.getLong("id"),
                 rs.getString("nome"),
                 rs.getString("notaFiscal"),
-                rs.getString("statusPedido"),
+                statusPedido,
                 rs.getInt("qtd"),
                 rs.getDouble("valor"),
                 rs.getString("descricao")
