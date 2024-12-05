@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*", allowCredentials = "false")
 @Tag(name = "Cliente", description = "API para gerenciamento de clientes")
 @RequestMapping("/cliente")
 public class ClienteController {

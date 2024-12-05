@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*", allowCredentials = "false")
 @Tag(name = "Fornecedor", description = "API para gerenciamento de fornecedores")
 @RequestMapping("/fornecedor")
 public class FornecedorController {

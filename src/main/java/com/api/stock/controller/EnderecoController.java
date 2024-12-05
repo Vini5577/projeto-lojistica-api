@@ -14,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*", allowCredentials = "false")
 @Tag(name = "Endereço", description = "API para gerenciamento de endereços")
 @RequestMapping("/endereco")
 public class EnderecoController {

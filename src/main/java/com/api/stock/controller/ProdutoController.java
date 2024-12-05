@@ -1,6 +1,7 @@
 package com.api.stock.controller;
 
 import com.api.stock.dto.ProdutoDTO;
+import com.api.stock.model.Produto;
 import com.api.stock.service.ProdutoService;
 import com.api.stock.util.IdGenerate;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,7 +19,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*", allowCredentials = "false")
 @Tag(name = "Produto", description = "API para gerenciamento de produtos")
 @RequestMapping("/produto")
 public class ProdutoController {
