@@ -1,20 +1,26 @@
 package com.api.stock.service;
 
+import com.api.stock.controller.PedidoController;
+import com.api.stock.dto.PedidoClienteDTO;
 import com.api.stock.dto.PedidoDTO;
 import com.api.stock.model.*;
 import com.api.stock.repository.ClienteRepository;
 import com.api.stock.repository.PedidoRepository;
 import com.api.stock.repository.ProdutoRepository;
 import com.api.stock.util.IdGenerate;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
 import java.util.Arrays;
 import java.util.List;
@@ -38,6 +44,9 @@ public class PedidoServiceTest {
 
     @MockBean
     private PedidoRepository pedidoRepository;
+
+    @Autowired
+    private PedidoController pedidoController;
 
     @Mock
     private IdGenerate idGenerate;
@@ -120,42 +129,22 @@ public class PedidoServiceTest {
     }
 
     @Test
-    public void testGetAllPedidos_Success() {
-        // Criação dos objetos de Pedido
-        Cliente cliente1 = new Cliente("C1", "Cliente 1", "12345678000199", "cliente1@email.com", "11987654321");
-        Cliente cliente2 = new Cliente("C2", "Cliente 2", "98765432000188", "cliente2@email.com", "11987654322");
+    void testGetAllPedido() {
+        Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
+        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
-        Produto produto1 = new Produto("P1", "Produto 1", 50.0, 10L, "Descrição do produto 1", new Fornecedor());
-        Produto produto2 = new Produto("P2", "Produto 2", 100.0, 5L, "Descrição do produto 2", new Fornecedor());
+        List<PedidoClienteDTO> pedidosDTO = List.of(
+                new PedidoClienteDTO(1L,"Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
+                new PedidoClienteDTO(1L, "Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
+        );
 
-        Pedido pedido1 = new Pedido();
-        pedido1.setCliente(cliente1);
-        pedido1.setProduto(produto1);
-        pedido1.setNotaFiscal("NF123");
-        pedido1.setValor(100.0);
-        pedido1.setQtd(2);
-        pedido1.setStatusPedido(StatusPedido.PEDIDO_REALIZADO);
+        Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidosDTO);
 
-        Pedido pedido2 = new Pedido();
-        pedido2.setCliente(cliente2);
-        pedido2.setProduto(produto2);
-        pedido2.setNotaFiscal("NF124");
-        pedido2.setValor(200.0);
-        pedido2.setQtd(3);
-        pedido2.setStatusPedido(StatusPedido.PEDIDO_REALIZADO);
+        ResponseEntity<Object> response = pedidoController.getPedido();
 
-        when(pedidoRepository.findAll()).thenReturn(Arrays.asList(pedido1, pedido2));
-
-        List<Pedido> pedidos = pedidoService.getAllPedidos();
-
-        assertNotNull(pedidos);
-        assertEquals(2, pedidos.size());
-        assertEquals("C1", pedidos.get(0).getCliente().getId());
-        assertEquals("C2", pedidos.get(1).getCliente().getId());
-        assertEquals("NF123", pedidos.get(0).getNotaFiscal());
-        assertEquals("NF124", pedidos.get(1).getNotaFiscal());
-
-        verify(pedidoRepository, times(1)).findAll();
+        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
+        Assertions.assertEquals(pedidosDTO, response.getBody());
+        Mockito.verify(pedidoService).getAllPedidos();
     }
 
     @Test

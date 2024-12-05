@@ -59,8 +59,8 @@ public class PedidoControllerTest {
         Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
         List<PedidoClienteDTO> pedidosDTO = List.of(
-                new PedidoClienteDTO("Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
-                new PedidoClienteDTO("Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
+                new PedidoClienteDTO(1L, "Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
+                new PedidoClienteDTO(1L, "Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
         );
 
         Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidosDTO);
@@ -69,7 +69,8 @@ public class PedidoControllerTest {
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
         Assertions.assertEquals(pedidosDTO, response.getBody());
-        Mockito.verify(pedidoService).getAllPedidos();
+
+        Mockito.verify(pedidoService, Mockito.times(1)).getAllPedidos();
     }
 
     @Test
