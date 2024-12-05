@@ -1,5 +1,6 @@
 package com.api.stock.controller;
 
+import com.api.stock.dto.PedidoClienteDTO;
 import com.api.stock.dto.PedidoDTO;
 import com.api.stock.model.Cliente;
 import com.api.stock.model.Pedido;
@@ -56,18 +57,18 @@ public class PedidoControllerTest {
     void testGetAllPedido() {
         Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
         Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
-        
-        List<Pedido> pedidos = List.of(
-                new Pedido(1L, cliente, produto, "12345", 100.0, 2, null),
-                new Pedido(2L, cliente, produto, "12346", 150.0, 1, null)
+
+        List<PedidoClienteDTO> pedidosDTO = List.of(
+                new PedidoClienteDTO("Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
+                new PedidoClienteDTO("Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
         );
 
-        Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidos);
+        Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidosDTO);
 
         ResponseEntity<Object> response = pedidoController.getPedido();
 
         Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals(pedidos, response.getBody());
+        Assertions.assertEquals(pedidosDTO, response.getBody());
         Mockito.verify(pedidoService).getAllPedidos();
     }
 

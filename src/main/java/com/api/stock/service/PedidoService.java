@@ -57,9 +57,9 @@ public class PedidoService {
     }
 
     public List<PedidoClienteDTO> getAllPedidos() {
-        // SQL da consulta
         String sql = "SELECT " +
                 "c.nome, " +
+                "p.id," +
                 "p.nota_fiscal AS notaFiscal, " +
                 "p.status_pedido AS statusPedido, " +
                 "p.qtd, " +
@@ -70,12 +70,12 @@ public class PedidoService {
                 "INNER JOIN tbl_produto AS r ON p.produto_id = r.id";
 
         List<PedidoClienteDTO> pedidos = jdbcTemplate.query(sql, this::mapRow);
-        System.out.println("Pedidos retornados: " + pedidos);
         return pedidos;
     }
 
     public PedidoClienteDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
         return new PedidoClienteDTO(
+                rs.getLong("id"),
                 rs.getString("nome"),
                 rs.getString("notaFiscal"),
                 rs.getString("statusPedido"),

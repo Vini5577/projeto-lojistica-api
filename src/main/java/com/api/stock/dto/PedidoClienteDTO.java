@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PedidoClienteDTO {
+    private Long id;
     private String nome;
     private String notaFiscal;
     private String statusPedido;
