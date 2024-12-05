@@ -16,6 +16,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
 @RequestMapping("/pedido")
 public class PedidoController {
 

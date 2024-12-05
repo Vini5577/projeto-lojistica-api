@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://127.0.0.1:4000", allowedHeaders = "*")
 @RequestMapping("/produto")
 public class ProdutoController {
 
