@@ -59,8 +59,8 @@ public class PedidoControllerTest {
         Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
 
         List<PedidoClienteDTO> pedidosDTO = List.of(
-                new PedidoClienteDTO(1L, "Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
-                new PedidoClienteDTO(1L, "Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
+                new PedidoClienteDTO(1L, "Cliente Teste", "12345", StatusPedido.PEDIDO_REALIZADO, 2, 100.0, "Descrição do Produto"),
+                new PedidoClienteDTO(1L, "Cliente Teste", "12346", StatusPedido.PEDIDO_REALIZADO, 1, 150.0, "Descrição do Produto")
         );
 
         Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidosDTO);

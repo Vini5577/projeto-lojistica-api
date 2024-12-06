@@ -21,7 +21,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 
+import javax.swing.tree.RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -47,6 +53,9 @@ public class PedidoServiceTest {
 
     @Autowired
     private PedidoController pedidoController;
+
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
 
     @Mock
     private IdGenerate idGenerate;
@@ -126,25 +135,6 @@ public class PedidoServiceTest {
         verify(clienteRepository, times(1)).findById("C1");
         verify(produtoRepository, times(1)).findById("P1");
         verify(pedidoRepository, never()).save(any(Pedido.class));
-    }
-
-    @Test
-    void testGetAllPedido() {
-        Cliente cliente = new Cliente("C1", "Cliente Teste", "99999999999", "cliente@teste.com", "12345678000199");
-        Produto produto = new Produto("P1", "Produto Teste", 100.0, 50L, "Descrição do Produto", null);
-
-        List<PedidoClienteDTO> pedidosDTO = List.of(
-                new PedidoClienteDTO(1L,"Cliente Teste", "12345", "Status", 2, 100.0, "Descrição do Produto"),
-                new PedidoClienteDTO(1L, "Cliente Teste", "12346", "Status", 1, 150.0, "Descrição do Produto")
-        );
-
-        Mockito.when(pedidoService.getAllPedidos()).thenReturn(pedidosDTO);
-
-        ResponseEntity<Object> response = pedidoController.getPedido();
-
-        Assertions.assertEquals(HttpStatus.OK, response.getStatusCode());
-        Assertions.assertEquals(pedidosDTO, response.getBody());
-        Mockito.verify(pedidoService).getAllPedidos();
     }
 
     @Test
